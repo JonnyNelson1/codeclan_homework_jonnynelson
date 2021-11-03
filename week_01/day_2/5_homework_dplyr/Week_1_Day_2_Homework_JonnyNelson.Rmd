@@ -1,0 +1,140 @@
+---
+title: "Homework Week 1 Day 2"
+output: html_notebook
+---
+
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+tidyverse_logo()
+```
+```{r}
+tidyverse::tidyverse_logo()
+```
+
+```{r}
+devtools::install_github("codeclan/CodeClanData")
+```
+
+```{r}
+devtools::install_github("codeclan/CodeClanData")
+```
+
+```{r}
+class(CodeClanData::starwars)
+```
+
+```{r}
+install.packages("devtools")
+```
+
+```{r}
+devtools::install_github("codeclan/CodeClanData")
+```
+
+```{r}
+library(CodeClanData)
+```
+
+```{r}
+starbucks_data <- drinks_content
+```
+
+# Question 1
+
+```{r}
+dim(drinks_content)
+
+# Gives the dimensions of the data
+```
+
+```{r}
+names(drinks_content)
+
+# Gives the variable names
+```
+
+```{r}
+str(drinks_content)
+
+#Down at the bottom the variable types are shown
+```
+
+# Question 2
+
+```{r}
+new_table <- select(starbucks_data, Beverage_category, Beverage, Beverage_prep, Calories)
+
+new_table
+  
+```
+# Answer to Question 2
+
+```{r}
+starbucks_data %>%
+  select(Beverage_category, Beverage, Beverage_prep, Calories) %>%
+  filter(is.na(Calories)) %>%
+  summarise(count_of_missing_calories = n())
+```
+
+
+# Question 3 
+
+```{r}
+
+new_table_1 <- mutate(new_table, Calorie_Diff = Calories - 135)
+
+new_table_1
+```
+
+# Question 4 Summarise the mean number of calories in each beverage_category. Which 3 category of drinks have the most calories? Which 3 drinks have the least? Write a small summary of your findings.
+
+```{r}
+new_table_1 %>%
+  group_by(Beverage_category) %>%
+  summarise(mean_calories = mean(Calories)) %>%
+  arrange(desc(mean_calories)) %>%
+  head(3)
+  
+
+# Can write arrange(desc(`mean(Calories)`) 
+```
+
+# Question 5 Let’s look at this a different way. What is the average number of calories in each Beverage_prep type?
+
+```{r}
+new_table_1 %>%
+  group_by(Beverage_prep) %>%
+  summarise(mean)
+```
+
+# Question 6: Which Beverage_prep type contains more than the average calories of all drinks?
+
+```{r}
+avg_cal <- starbucks_data %>%
+  summarise(mean_cal = mean(Calories)) %>%
+  pull()
+
+
+class(avg_cal)
+```
+
+```{r}
+
+```
+
+# Question 7:
+
+```{r}
+starbucks_data %>%
+  filter(Beverage_category != "Tazo® Tea Drinks") %>%
+  group_by(Beverage_category, Beverage, Beverage_prep) %>%
+  summarise(min_cal = min(Calories)) %>%
+  arrange(min_cal)
+  head(10)
+
+```
+

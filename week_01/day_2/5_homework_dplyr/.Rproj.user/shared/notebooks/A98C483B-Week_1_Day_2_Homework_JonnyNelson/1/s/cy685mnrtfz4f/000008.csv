@@ -1,0 +1,4 @@
+"0","starbucks_data %>%"
+"0","  select(Beverage_category, Beverage, Beverage_prep, Calories) %>%"
+"0","  filter(is.na(Calories)) %>%"
+"0","  summarise(count_of_missing_calories = n())"

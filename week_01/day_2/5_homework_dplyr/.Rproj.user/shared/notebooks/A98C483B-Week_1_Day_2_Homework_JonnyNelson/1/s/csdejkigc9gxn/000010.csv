@@ -1,0 +1,7 @@
+"0","starbucks_data %>%"
+"0","  filter(Beverage_category != ""Tazo® Tea Drinks"") %>%"
+"0","  group_by(Beverage_category, Beverage, Beverage_prep) %>%"
+"0","  summarise(min_cal = min(Calories)) %>%"
+"0","  arrange(min_cal)"
+"1","`summarise()` has grouped output by 'Beverage_category', 'Beverage'. You can override using the `.groups` argument.
+"

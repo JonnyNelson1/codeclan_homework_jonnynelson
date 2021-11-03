@@ -1,0 +1,3 @@
+"0","new_table <- select(starbucks_data, Beverage_category, Beverage, Beverage_prep, Calories)"
+"0",""
+"0","new_table"

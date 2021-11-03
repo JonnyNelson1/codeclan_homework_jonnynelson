@@ -1,0 +1,5 @@
+"0","new_table_1 %>%"
+"0","  group_by(Beverage_category) %>%"
+"0","  summarise(mean_calories = mean(Calories)) %>%"
+"0","  arrange(desc(mean_calories)) %>%"
+"0","  head(3)"
