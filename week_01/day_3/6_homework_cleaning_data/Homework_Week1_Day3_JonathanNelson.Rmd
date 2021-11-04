@@ -47,8 +47,14 @@ movie_selected %>%
 ```
 
 ```{r}
+# This is the answer given in the class notes
+
 movie_selected %>% 
   summarise(across(.fns = ~sum(is.na(.x))))
+
+# Default is to look at everything() anyway.
+
+# Hover over across to get the arguments required.
 ```
 
 
@@ -86,20 +92,18 @@ movies_imputed
 ```{r}
 movies_imputed <- movies_runtime %>%
   select(runtime) %>%
-  mutate(runtime = if_else(is.na(runtime), median(runtime), runtime))
+  mutate(runtime = if_else(is.na(runtime), median(runtime, na.rm = TRUE), runtime))
 
 movies_imputed
 
 # Tried this peice of code, however, the runtime comes out strange and there certainly aren't 37 median values there 
+
+#Finally got the code to work. Requires "na.rm = TRUE"
 ```
 
 ```{r}
 movies_imputed <- movies_runtime %>%
-  mutate(runtime = coalesce(
-    runtime,
-    median(runtime,
-    na.rm = TRUE)
-    ))
+  mutate(runtime = coalesce(runtime, median(runtime, na.rm = TRUE)))
 
 movies_imputed
 
@@ -144,26 +148,12 @@ movie_budgets <- movies_budgets_edits %>%
   select(budget) %>%
   mutate(budget_type = case_when(
     budget < 12e6 ~ "Small budget",
-    budget > 12e6 | budget < 40e6 ~ "Medium budget",
+    budget < 40e6 ~ "Medium budget",
     budget > 40e6 ~ "Large budget"
   ))
 
 movie_budgets
 ```
-
-```{r}
-movie_budgets <- movies_imputed %>%
-  mutate(
-    budget_type = case_when(
-      budget < 12e6 ~ "Small budget",
-      budget < 40e6 ~ "Medium budget",
-      budget >= 40e6 ~ "Big budget"
-      )
-    )
-
-movie_budgets
-```
-
 
 # Question 2: Take the original dataset with all the variables. Using across and where, summarise the number of missing values, first across all columns of type character, and then across all columns of type numeric.
 
@@ -174,7 +164,7 @@ movies %>%
 
 ```{r}
 movies %>%
-  summarise(across(where(is.numeric), ~sum(is.na(.))))
+  summarise(across(where(is.numeric), ~sum(is.na(.x))))
 ```
 
 
