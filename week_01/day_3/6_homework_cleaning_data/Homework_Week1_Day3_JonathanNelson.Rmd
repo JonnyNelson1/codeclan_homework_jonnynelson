@@ -46,16 +46,24 @@ movie_selected %>%
   
 ```
 
+```{r}
+movie_selected %>% 
+  summarise(across(.fns = ~sum(is.na(.x))))
+```
+
+
 # Question 4: There’s not too many NAs, but there are actually quite a few movies with a runtime of 0 in this dataset. Since it’s impossible for a movie to have a runtime of 0, use the function na_if to convert runtimes of length 0 into NAs. Save this into a new variable called movies_runtime. Then count how many missing values there are now in the column runtime.
 
 ```{r}
 movies_runtime <- movie_selected %>%
   mutate(
     runtime = na_if(runtime, 0)
-  ) 
+  ) %>%
 # %>%
 #   arrange(runtime) %>%
 #   count(runtime)
+
+  summarise(count = sum(is.na(runtime)))
 
 movies_runtime
 
@@ -135,13 +143,27 @@ movies_budgets_edits
 movie_budgets <- movies_budgets_edits %>%
   select(budget) %>%
   mutate(budget_type = case_when(
-    budget < 12000000 ~ "small budget",
-    budget > 12000000 | budget < 40000000 ~ "medium budget",
-    budget > 40000000 ~ "large budget"
+    budget < 12e6 ~ "Small budget",
+    budget > 12e6 | budget < 40e6 ~ "Medium budget",
+    budget > 40e6 ~ "Large budget"
   ))
 
 movie_budgets
 ```
+
+```{r}
+movie_budgets <- movies_imputed %>%
+  mutate(
+    budget_type = case_when(
+      budget < 12e6 ~ "Small budget",
+      budget < 40e6 ~ "Medium budget",
+      budget >= 40e6 ~ "Big budget"
+      )
+    )
+
+movie_budgets
+```
+
 
 # Question 2: Take the original dataset with all the variables. Using across and where, summarise the number of missing values, first across all columns of type character, and then across all columns of type numeric.
 
