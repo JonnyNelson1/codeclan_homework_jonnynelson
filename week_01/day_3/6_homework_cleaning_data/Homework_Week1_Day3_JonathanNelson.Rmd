@@ -8,9 +8,11 @@ output: html_notebook
 ```{r}
 library(tidyverse)
 ```
+
 ```{r}
 library(janitor)
 ```
+
 ```{r}
 movies <- read_csv("data/movies.csv")
 
@@ -65,7 +67,6 @@ movies_runtime <- movie_selected %>%
   mutate(
     runtime = na_if(runtime, 0)
   ) %>%
-# %>%
 #   arrange(runtime) %>%
 #   count(runtime)
 
@@ -129,7 +130,7 @@ movies_imputed %>%
 ```{r}
 movies_budgets_edits <- movies_imputed %>%
   mutate(budget = if_else(budget < 100,
-   median(budget),budget))
+   median(budget), budget))
 
 movies_budgets_edits
 ```
@@ -147,7 +148,7 @@ movies_budgets_edits
 movie_budgets <- movies_budgets_edits %>%
   select(budget) %>%
   mutate(budget_type = case_when(
-    budget < 12e6 ~ "Small budget",
+    budget < 12e6 ~ "Small b--udget",
     budget < 40e6 ~ "Medium budget",
     budget > 40e6 ~ "Large budget"
   ))

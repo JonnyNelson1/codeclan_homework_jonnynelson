@@ -1,0 +1,134 @@
+---
+title: "Week 1 Weekend Homework"
+output: html_notebook
+---
+```{r}
+library(tidyverse)
+```
+
+```{r}
+books <- read_csv("data/books.csv")
+```
+
+```{r}
+dim(books)
+```
+
+```{r}
+str(books)
+```
+
+```{r}
+names(books)
+```
+
+```{r}
+glimpse(books)
+```
+
+```{r}
+books %>%
+  # mutate(average_rating = case_when(
+  #   ratings_count <= 5 ~ "NA",
+  #   text_reviews_count <= 5 ~ "NA",
+  #   TRUE ~ average_rating
+  #   
+  # ))
+  
+  mutate(average_rating = na.if(ratings_count <= 5)) %>%
+  mutate(average_rating = na.if(text_reviews_count <= 5))
+
+# Here I am attempting to mutate away the average ratings where ratings count or
+# text reviews count is less than 5, as this skews the average rating, giving 
+# misrepresenting data for average_rating
+```
+
+
+
+# Now that we have had a look at the data some questions come to mind that may be answered.
+
+# Question 1: Find out the 10 most widely used publishers in the data set.
+
+```{r}
+books %>%
+  
+  # select(publisher, authors, bookID) %>%
+  # count(publisher)
+  
+  # group_by(publisher, authors, bookID) %>%
+  # summarise(publisher, sum(n()))
+  
+  group_by(publisher) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count)) %>%
+  head(n = 10)
+
+# Got there eventually! Now I have the publishers in descending order of how many books were published with each. 
+
+```
+
+# Question 2: Usings ratings_count as a proxy for popularity, are older books more popular than newer books? 
+
+```{r}
+books_date_edited <- books %>%
+  select(title, ratings_count, text_reviews_count, publication_date) %>%
+  mutate(date = as.Date(publication_date, "%m/%d/%Y")) %>%
+  arrange(date)
+
+books_date_edited
+# current form of the date does not read properly. Need to mutate the publication date into something more in line with how we can arrange the dataset.
+
+# No way! Actually managed to use stackoverflow to mutate the date function.
+```
+
+# Question 3: Which 100 authors have the highest average rating, across all of their books?
+
+```{r}
+average_author_ratings <- books %>%
+  select(authors, average_rating, ratings_count) %>%
+  group_by(authors) %>%
+  # aggregate(authors_ratings[, 2:3], list(authors_ratings$authors), mean)
+  mutate(average_author_rating = mean(average_rating)) %>%
+  arrange(desc(average_author_rating)) %>%
+  filter(ratings_count > 1000) %>%
+  head(100)
+
+average_author_ratings
+
+# Data is heavily skewed by authors who have a handful of ratings, but these are not representative. Added a filter to get these results out.
+
+# How do I condense down the authors to single variables, new table?
+  
+  
+```
+
+# Question 4: My friend Greg is looking for a new book to read and is looking for something specific. He doesn't want a book written after the year 1980, as he likes to get lost in a world prior to the internet. He wants to be able to read it while on holiday, so the book has to be between 500 - 1200 pages long. He wants something highly rated (above a 8/10), has a few reviews he can read before purchasing (>10), but not too popular as he loves being alternative (1000 < ratings_count < 10,000).
+
+```{r}
+books %>%
+  mutate(date = as.Date(publication_date, "%m/%d/%Y")) %>%
+  mutate(average_rating = average_rating * 2) %>%
+  filter(date < "1980-01-01") %>%
+  filter(num_pages >= 500, num_pages <= 1200) %>%
+  filter(average_rating >= 4.00) %>%
+  filter(text_reviews_count >= 10) %>%
+  filter(ratings_count < 10000, ratings_count > 1000) %>%
+  arrange(desc(average_rating))
+  
+```
+
+# Question 5: Combine the average_rating and ratings_count to form a new variable with a qualitative edge
+
+```{r}
+books %>%
+  select(ratings_count, average_rating) %>%
+  mutate(book_rating_category = case_when(
+    ratings_count >= 50000 & average_rating >= 4.5 ~ "Blockbuster",
+    ratings_count <= 50000 | average_rating >= 4.0 ~ "Underground Hit",
+    TRUE ~ "Other"
+  )) %>%
+  arrange(book_rating_category)
+```
+
+
+
