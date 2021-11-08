@@ -70,9 +70,13 @@ books %>%
 # Question 2: Usings ratings_count as a proxy for popularity, are older books more popular than newer books? 
 
 ```{r}
+
+library(lubridate)
+
 books_date_edited <- books %>%
   select(title, ratings_count, text_reviews_count, publication_date) %>%
-  mutate(date = as.Date(publication_date, "%m/%d/%Y")) %>%
+  mutate(date = as.Date(publication_date, "%m/%d/%Y"),
+         year = year(date)) %>%
   arrange(date)
 
 books_date_edited
@@ -117,18 +121,88 @@ books %>%
   
 ```
 
-# Question 5: Combine the average_rating and ratings_count to form a new variable with a qualitative edge
+# Question 5: Combine the average_rating and ratings_count to form a new qualitative variable.
 
 ```{r}
-books %>%
+books_new_category <- books %>%
   select(ratings_count, average_rating) %>%
   mutate(book_rating_category = case_when(
     ratings_count >= 50000 & average_rating >= 4.5 ~ "Blockbuster",
-    ratings_count <= 50000 | average_rating >= 4.0 ~ "Underground Hit",
+    ratings_count <= 50000 & average_rating >= 4.0 ~ "Underground Hit",
     TRUE ~ "Other"
   )) %>%
   arrange(book_rating_category)
+
+books_new_category
+```
+# Additonal Questions and Answers from the homework review.
+
+# 1.
+
+```{r}
+books %>%
+  filter(!is.na(rowid)) %>%
+  group_by(authors) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count))
+
+books %>%
+  filter(authors == "Stephen King") %>% 
+  group_by(average_rating) %>% 
+  arrange(desc(average_rating)) %>%
+  distinct(title, .keep_all = TRUE)
+
+# The gunslinger and the gunslinger (TDT) are the same book, how to group these together
+
+# distinct() function is grouping observations with the same title.
+
+books %>%
+  filter(!is.na(rowid)) %>%
+  group_by(authors, title) %>%
+  summarise(count = n(),
+            mean_rating_of_all_books = sum(average_rating)/count) %>%
+  arrange(desc(count))
 ```
 
+# 2. 
 
+```{r}
+short_book <- books%>%
+  select(title, average_rating, num_pages) %>%
+  mutate(length_of_book = case_when(
+    num_pages < 200 ~ "under 200",
+    num_pages > 200 & num_pages < 400 ~ "200 to 400",
+    TRUE ~ "above 2000")) %>%
+  group_by(length_of_book) %>%
+  # filter(length_of_book == "200 to 400") %>%
+  summarise(low_book_avg_rating = mean(average_rating))
+  
+long_book <- books %>%
+  select(title, average_rating, num_pages) %>%
+  mutate(length_of_book = case_when(
+    num_pages < 600 ~ "under 200",
+    num_pages > 600 & num_pages < 800 ~ "600 to 800",
+    TRUE ~ "above 2000")) %>%
+  filter(length_of_book == "600 to 800") %>%
+  summarise(high_book_avg_rating = mean(average_rating))
+
+highest_book_split_rating <- short_book < long_book
+highest_book_split_rating
+
+# Edited code in class
+
+book_summ <- books %>%
+  select(title, average_rating, num_pages) %>%
+  mutate(length_of_book = case_when(
+    num_pages < 200 ~ "0. under 200",
+    num_pages >= 200 & num_pages < 400 ~ "200 to 400",
+    num_pages >= 400 & num_pages < 600 ~ "400 to 600",
+    num_pages >= 600 & num_pages < 800 ~ "600 to 800",
+    TRUE ~ "above 800")) %>%
+  # filter(length_of_book == "200 to 400") %>%
+  group_by(length_of_book) %>%
+  summarise(avg_rating = mean(average_rating))
+
+# Get the average ratings as grouped by page count.
+```
 
