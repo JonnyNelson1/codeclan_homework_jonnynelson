@@ -34,8 +34,9 @@ Find the total number of favourites (stored in favorite_count) that CodeClan twe
 
 codeclan_tweets %>%
   select(favorite_count, is_quote) %>%
-  filter(is_quote = TRUE) %>%
+  filter(is_quote == FALSE) %>%
   sum()
+
 
 ```
 
@@ -46,7 +47,7 @@ Summarise the mean number of retweets (retweet_count), split by the type of plat
 
 codeclan_tweets %>%
   group_by(source) %>%
-  filter(is_quote = TRUE) %>%
+  filter(is_quote == FALSE) %>%
   summarise(mean(retweet_count))
 
 ```
@@ -63,12 +64,11 @@ codeclan_tweets %>%
   # arrange(desc(count))
   
   select(media_type, favorite_count) %>%
+  
   group_by(media_type) %>%
   # replace_na(media_type)
-  summarise(
-    count = n()
-  ) %>% 
-  arrange(desc(count))
+  summarise(fav_count_total = sum(favorite_count)) %>% 
+  arrange(desc(fav_count_total))
 
 # Need to finish off renaming the NA values in the media_type
 
@@ -84,6 +84,14 @@ codeclan_tweets %>%
   summarise(mean(display_text_width))
 
 # could round this data?
+
+# Answer written by David
+
+codeclan_tweets %>%
+  mutate(count_str_length = str_length(text)) %>%
+  select(count_str_length, display_text_width, text) %>% 
+  summarise(mean_counts = mean(count_str_length, na.rm = TRUE),
+            mean_dsp = mean(display_text_width, na.rm = TRUE))
 
 ```
 
@@ -104,8 +112,27 @@ From your new joined data, create a new tibble codeclan_hashtags containing only
 codeclan_hashtags <- codeclan_all_data %>%
   select(tweet_id, hashtags) %>%
   filter(!is.na (hashtags)) %>%
-  str_to_lower()
-  
+  mutate(lowcase_hashtag = str_to_lower(hashtags))
+
+# Because we are in a data frame we need to wrap
+
+# This is the standard CodeClan answer below for comparison
+
+# codeclan_hashtags <- codeclan_all_data%>% 
+#   select(tweet_id, hashtags) %>%
+#   mutate(lowcase_hashtag = str_to_lower(hashtags)) %>%
+#   select(-hashtags) %>%
+#   drop_na(lowcase_hashtag)
+
+# Louises interesting answer, expanded on in class.
+
+codeclan_all_data %>%
+  select(tweet_id, hashtags, text) %>%
+  filter(str_detect(text, ("[#]"))) %>% 
+  mutate(hashtags = str_extract_all(text, "#[A-Za-z0-9]*")) %>% 
+  unnest() %>% 
+  mutate(hashtags = str_to_lower(hashtags))
+
 ```
 
 4 Extensions
