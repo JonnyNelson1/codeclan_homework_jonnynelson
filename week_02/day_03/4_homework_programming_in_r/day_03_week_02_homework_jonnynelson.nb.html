@@ -309,29 +309,43 @@ weather$Thursday$cor</code></pre>
 <p>You will want to give a name to the matrix you create.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZm9ydG5pZ2h0X2ZvcmVjYXN0IDwtIG1hdHJpeChjKDExLCAxMiwgMTMsIDksIDEwLCA1LCA1LCA1LCA5LCAxMCwgMTEsIDE1LCAxNiwgMTcpLCBucm93ID0gMiwgbmNvbCA9IDcpXG5cbmZvcnRuaWdodF9mb3JlY2FzdFxuYGBgIn0= -->
-<pre class="r"><code>fortnight_forecast &lt;- matrix(c(11, 12, 13, 9, 10, 5, 5, 5, 9, 10, 11, 15, 16, 17), nrow = 2, ncol = 7)
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZm9ydG5pZ2h0X2ZvcmVjYXN0IDwtIG1hdHJpeChjKDExLCAxMiwgMTMsIDksIDEwLCA1LCA1LCA1LCA5LCAxMCwgMTEsIDE1LCAxNiwgMTcpLCBucm93ID0gMiwgbmNvbCA9IDcsIGJ5cm93ID0gVFJVRSlcblxuXG5cbmZvcnRuaWdodF9mb3JlY2FzdFxuYGBgIn0= -->
+<pre class="r"><code>fortnight_forecast &lt;- matrix(c(11, 12, 13, 9, 10, 5, 5, 5, 9, 10, 11, 15, 16, 17), nrow = 2, ncol = 7, byrow = TRUE)
+
+
 
 fortnight_forecast</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgICBbLDFdIFssMl0gWywzXSBbLDRdIFssNV0gWyw2XSBbLDddXG5bMSxdICAgMTEgICAxMyAgIDEwICAgIDUgICAgOSAgIDExICAgMTZcblsyLF0gICAxMiAgICA5ICAgIDUgICAgNSAgIDEwICAgMTUgICAxN1xuIn0= -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICBbLDFdIFssMl0gWywzXSBbLDRdIFssNV0gWyw2XSBbLDddXG5bMSxdICAgMTEgICAxMiAgIDEzICAgIDkgICAxMCAgICA1ICAgIDVcblsyLF0gICAgNSAgICA5ICAgMTAgICAxMSAgIDE1ICAgMTYgICAxN1xuIn0= -->
 <pre><code>     [,1] [,2] [,3] [,4] [,5] [,6] [,7]
-[1,]   11   13   10    5    9   11   16
-[2,]   12    9    5    5   10   15   17</code></pre>
+[1,]   11   12   13    9   10    5    5
+[2,]    5    9   10   11   15   16   17</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBJZiBJIHdhbnRlZCB0byB0cmFuc2ZlciB0byBhIGRhdGEgZnJhbWUgYW5kIGdpdmUgdGhlIGNvbHVtbnMgbmFtZXMsIGhvdyB3b3VsZCBJIGRvIHRoYXQ/XG5cbiAjIGFzLmRhdGEuZnJhbWUoZm9ydG5pZ2h0X2ZvcmVjYXN0KSAlPiVcbiAjICAgbmFtZXMoZm9ydG5pZ2h0X2ZvcmVjYXN0KVsxXSA8LSBcIndlZWtfMDFcIlxuICMgICBuYW1lcyhmb3J0bmlnaHRfZm9yZWNhc3QpWzJdIDwtIFwid2Vla18wMlwiXG5cbiMgYXMuZGF0YS5mcmFtZShmb3J0bmlnaHRfZm9yZWNhc3QpICU+JVxuIyAgIHJlbmFtZShcbiMgICAgIGNvbHMgPSB3ZWVrXzAxLCB3ZWVrXzAyXG4jICAgKVxuXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBJZiBJIHdhbnRlZCB0byB0cmFuc2ZlciB0byBhIGRhdGEgZnJhbWUgYW5kIGdpdmUgdGhlIGNvbHVtbnMgbmFtZXMsIGhvdyB3b3VsZCBJIGRvIHRoYXQ/XG5cbiAjIGFzLmRhdGEuZnJhbWUoZm9ydG5pZ2h0X2ZvcmVjYXN0KVxuICMgICBjb2xuYW1lcyhmb3J0bmlnaHRfZm9yZWNhc3QpWzFdIDwtIFwid2Vla18wMVwiXG4gIyAgIHJvd25hbWVzKGZvcnRuaWdodF9mb3JlY2FzdClbMl0gPC0gXCJ3ZWVrXzAyXCJcblxuIyBhcy5kYXRhLmZyYW1lKGZvcnRuaWdodF9mb3JlY2FzdCkgJT4lXG4jICAgcmVuYW1lKFxuIyAgICAgY29scyA9IHdlZWtfMDEsIHdlZWtfMDJcbiMgICApXG5cbmxpYnJhcnkobWFncml0dHIpXG5cbiMgZmluZEZ1bmN0aW9uKFwicGl2b3RfbG9uZ2VyXCIpXG5cbiAgYXNfdGliYmxlKGZvcnRuaWdodF9mb3JlY2FzdCkgJT4lIFxuICByb3duYW1lc190b19jb2x1bW4oXCJ3ZWVrXCIpICU+JSBcbiAgcGl2b3RfbG9uZ2VyKGNvbHMgPSAtd2VlaywgbmFtZXNfdG8gPSBcImRheVwiLCB2YWx1ZXNfdG8gPSBcInRlbXBcIikpXG5gYGAifQ== -->
 <pre class="r"><code># If I wanted to transfer to a data frame and give the columns names, how would I do that?
 
- # as.data.frame(fortnight_forecast) %&gt;%
- #   names(fortnight_forecast)[1] &lt;- &quot;week_01&quot;
- #   names(fortnight_forecast)[2] &lt;- &quot;week_02&quot;
+ # as.data.frame(fortnight_forecast)
+ #   colnames(fortnight_forecast)[1] &lt;- &quot;week_01&quot;
+ #   rownames(fortnight_forecast)[2] &lt;- &quot;week_02&quot;
 
 # as.data.frame(fortnight_forecast) %&gt;%
 #   rename(
 #     cols = week_01, week_02
 #   )
-</code></pre>
+
+library(magrittr)
+
+# findFunction(&quot;pivot_longer&quot;)
+
+  as_tibble(fortnight_forecast) %&gt;% 
+  rownames_to_column(&quot;week&quot;) %&gt;% 
+  pivot_longer(cols = -week, names_to = &quot;day&quot;, values_to = &quot;temp&quot;))</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3I6IHVuZXhwZWN0ZWQgJyknIGluOlxuXCIgIHJvd25hbWVzX3RvX2NvbHVtbihcIndlZWtcIikgJT4lIFxuICBwaXZvdF9sb25nZXIoY29scyA9IC13ZWVrLCBuYW1lc190byA9IFwiZGF5XCIsIHZhbHVlc190byA9IFwidGVtcFwiKSlcIlxuIn0= -->
+<pre><code>Error: unexpected &#39;)&#39; in:
+&quot;  rownames_to_column(&quot;week&quot;) %&gt;% 
+  pivot_longer(cols = -week, names_to = &quot;day&quot;, values_to = &quot;temp&quot;))&quot;</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>Question 4. From the matrix you just made select:</p>
@@ -341,49 +355,91 @@ fortnight_forecast</code></pre>
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZm9ydG5pZ2h0X2ZvcmVjYXN0WzIsIDNdXG5gYGAifQ== -->
 <pre class="r"><code>fortnight_forecast[2, 3]</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDVcbiJ9 -->
-<pre><code>[1] 5</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDEwXG4ifQ== -->
+<pre><code>[1] 10</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZm9ydG5pZ2h0X2ZvcmVjYXN0WzIsXVxuYGBgIn0= -->
 <pre class="r"><code>fortnight_forecast[2,]</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDEyICA5ICA1ICA1IDEwIDE1IDE3XG4ifQ== -->
-<pre><code>[1] 12  9  5  5 10 15 17</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdICA1ICA5IDEwIDExIDE1IDE2IDE3XG4ifQ== -->
+<pre><code>[1]  5  9 10 11 15 16 17</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZm9ydG5pZ2h0X2ZvcmVjYXN0WzIsIGMoMSwzLDUpXVxuYGBgIn0= -->
-<pre class="r"><code>fortnight_forecast[2, c(1,3,5)]</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZm9ydG5pZ2h0X2ZvcmVjYXN0WywgYygxLDMsNSldXG5gYGAifQ== -->
+<pre class="r"><code>fortnight_forecast[, c(1,3,5)]</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDEyICA1IDEwXG4ifQ== -->
-<pre><code>[1] 12  5 10</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICBbLDFdIFssMl0gWywzXVxuWzEsXSAgIDExICAgMTMgICAxMFxuWzIsXSAgICA1ICAgMTAgICAxNVxuIn0= -->
+<pre><code>     [,1] [,2] [,3]
+[1,]   11   13   10
+[2,]    5   10   15</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>Question 5. Write a function that pre-appends “The answer is:” to any character input, while for numeric input, it either just returns the number for numbers less than 10, or divides the number by 10 for numbers greater than 10. For anything else return “Invalid input”.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5tdXRhdGVfYW5zd2VycyA8LSBmdW5jdGlvbih4KSB7XG4gIFxuICBpZihpcy5jaGFyYWN0ZXIoeCkpIFxuICBzdHJfYyhcIlRoZSBhbnN3ZXIgaXM6XCIpXG4gIGlmIChpcy5udW1lcmljKCkgJiAoeCA8IDEwKSkgXG4gIHByaW50KHgpXG4gIGlmIChpcy5udW1lcmljKCkgJiAoeCA+IDEwKSlcbiAgcHJpbnQoeC8xMCl9XG4gIFxuICBlbHNleyBcbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5saWJyYXJ5KHRpZHl2ZXJzZSlcbmBgYCJ9 -->
 <pre class="r"><code>
-mutate_answers &lt;- function(x) {
-  
-  if(is.character(x)) 
-  str_c(&quot;The answer is:&quot;)
-  if (is.numeric() &amp; (x &lt; 10)) 
-  print(x)
-  if (is.numeric() &amp; (x &gt; 10))
-  print(x/10)}
-  
-  else{ </code></pre>
+library(tidyverse)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3I6IHVuZXhwZWN0ZWQgJ2Vsc2UnIGluIFwiICBlbHNlXCJcbiJ9 -->
-<pre><code>Error: unexpected &#39;else&#39; in &quot;  else&quot;</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiUmVnaXN0ZXJlZCBTMyBtZXRob2RzIG92ZXJ3cml0dGVuIGJ5ICdkYnBseXInOlxuICBtZXRob2QgICAgICAgICBmcm9tXG4gIHByaW50LnRibF9sYXp5ICAgICBcbiAgcHJpbnQudGJsX3NxbCAgICAgIFxuLS0gQXR0YWNoaW5nIHBhY2thZ2VzIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tIHRpZHl2ZXJzZSAxLjMuMSAtLVxudiBnZ3Bsb3QyIDMuMy41ICAgICB2IHB1cnJyICAgMC4zLjRcbnYgdGliYmxlICAzLjEuNSAgICAgdiBkcGx5ciAgIDEuMC43XG52IHRpZHlyICAgMS4xLjQgICAgIHYgc3RyaW5nciAxLjQuMFxudiByZWFkciAgIDIuMC4yICAgICB2IGZvcmNhdHMgMC41LjFcbi0tIENvbmZsaWN0cyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSB0aWR5dmVyc2VfY29uZmxpY3RzKCkgLS1cbnggZHBseXI6OmZpbHRlcigpIG1hc2tzIHN0YXRzOjpmaWx0ZXIoKVxueCBkcGx5cjo6bGFnKCkgICAgbWFza3Mgc3RhdHM6OmxhZygpXG4ifQ== -->
+<pre><code>Registered S3 methods overwritten by &#39;dbplyr&#39;:
+  method         from
+  print.tbl_lazy     
+  print.tbl_sql      
+-- Attaching packages -------------------------------- tidyverse 1.3.1 --
+v ggplot2 3.3.5     v purrr   0.3.4
+v tibble  3.1.5     v dplyr   1.0.7
+v tidyr   1.1.4     v stringr 1.4.0
+v readr   2.0.2     v forcats 0.5.1
+-- Conflicts ----------------------------------- tidyverse_conflicts() --
+x dplyr::filter() masks stats::filter()
+x dplyr::lag()    masks stats::lag()</code></pre>
 <!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXV0YXRlX2Fuc3dlcnMgPC0gZnVuY3Rpb24oeCkge1xuICBcbiAgaWYoaXMuY2hhcmFjdGVyKHgpKXtcbiAgICByZXR1cm4oc3RyX2MoXCJUaGUgYW5zd2VyIGlzOlwiLCB4KSlcbiAgfVxuICBcbiAgaWYgKGlzLm51bWVyaWMoeCkgJiAoeCA8IDEwKSlcbiAgICBwcmludCh4KVxuICBcbiAgaWYgKGlzLm51bWVyaWMoeCkgJiAoeCA+IDEwKSlcbiAgICBwcmludCh4LzEwKVxuICBcbiAgZWxzZSB7XG4gIHByaW50KFwiSW52YWxpZCBpbnB1dFwiKVxuICB9XG59XG5cbm11dGF0ZV9hbnN3ZXJzKFwiYmxvb2JcIilcbmBgYCJ9 -->
+<pre class="r"><code>mutate_answers &lt;- function(x) {
+  
+  if(is.character(x)){
+    return(str_c(&quot;The answer is:&quot;, x))
+  }
+  
+  if (is.numeric(x) &amp; (x &lt; 10))
+    print(x)
+  
+  if (is.numeric(x) &amp; (x &gt; 10))
+    print(x/10)
+  
+  else {
+  print(&quot;Invalid input&quot;)
+  }
+}
+
+mutate_answers(&quot;bloob&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiVGhlIGFuc3dlciBpczpibG9vYlwiXG4ifQ== -->
+<pre><code>[1] &quot;The answer is:bloob&quot;</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyAgIGlmIChpcy5udW1lcmljKHgpKSB7XG4jICAgICBpZiAoeCA8IDEwKSB7XG4jICAgICAgIHJldHVybih4KVxuIyAgICAgfSBlbHNlIHtcbiMgICAgICAgcmV0dXJuKHggLyAxMClcbiMgICAgIH1cbiMgICB9XG4jIFxuIyAgIHJldHVybihcIkludmFsaWQgaW5wdXRcIilcbiMgfVxuXG5cbiAgXG5gYGAifQ== -->
+<pre class="r"><code>#   if (is.numeric(x)) {
+#     if (x &lt; 10) {
+#       return(x)
+#     } else {
+#       return(x / 10)
+#     }
+#   }
+# 
+#   return(&quot;Invalid input&quot;)
+# }
+
+
+  </code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>Question 6. Write a function which checks if two vectors have the same elements.</p>
 <p>If they have the same elements in the same order, return “Exactly the same” If they have the same elements but in a different order, return “The same” If they don’t have the same elements, return “Different”.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxueCA8LSBjKDEsMiwzLDUsNSlcbnkgPC0gYygxLDIsMyw0LDUpXG5cbiMgZm9yKHggaW4gMTpucm93KHgpID09IHkgaW4gMTpucm93KHkpKXtcbiMgICBwcmludChcIkV4YWN0bHkgdGhlIHNhbWVcIilcbiMgfVxuXG4jIGZvciAoeCBpbiAxOm5jb2woeCkpe1xuIyAgIGZvciAoeSBpbiAxOm5jb2woeSkpe1xuIyAgICAgaWYgKHggPT0geSkgblxuIyAgICAgcHJpbnQoXCJFeGFjdGx5IHRoZSBzYW1lXCIpXG4jICAgfVxuIyB9XG5cbiMgUGFydCAxXG5cbmZvciAoeCBpbiB5KSB7XG4gIGlmKHggJWluJSB5KVxuICAgIHByaW50KFwiRXhhY3RseSB0aGUgc2FtZVwiKVxufVxuXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxueCA8LSBjKDEsMiwzLDUsNSlcbnkgPC0gYygxLDIsMyw0LDUpXG5cbiMgZm9yKHggaW4gMTpucm93KHgpID09IHkgaW4gMTpucm93KHkpKXtcbiMgICBwcmludChcIkV4YWN0bHkgdGhlIHNhbWVcIilcbiMgfVxuXG4jIGZvciAoeCBpbiAxOm5jb2woeCkpe1xuIyAgIGZvciAoeSBpbiAxOm5jb2woeSkpe1xuIyAgICAgaWYgKHggPT0geSkgblxuIyAgICAgcHJpbnQoXCJFeGFjdGx5IHRoZSBzYW1lXCIpXG4jICAgfVxuIyB9XG5cbmZvcnRuaWdodF9mb3JlY2FzdCAlPiUgXG4gIGFzX3RpYmJsZSgpICU+JSBcbiAgcm93bmFtZXNfdG9fY29sdW1uKFwid2Vla1wiKSAlPiUgXG4gIHBpdm90X2xvbmdlcihjb2xzID0gLXdlZWssIG5hbWVzX3RvID0gXCJkYXlcIiwgdmFsdWVzX3RvID0gXCJ0ZW1wXCIpXG5cbmBgYCJ9 -->
 <pre class="r"><code>x &lt;- c(1,2,3,5,5)
 y &lt;- c(1,2,3,4,5)
 
@@ -398,26 +454,21 @@ y &lt;- c(1,2,3,4,5)
 #   }
 # }
 
-# Part 1
-
-for (x in y) {
-  if(x %in% y)
-    print(&quot;Exactly the same&quot;)
-}
+fortnight_forecast %&gt;% 
+  as_tibble() %&gt;% 
+  rownames_to_column(&quot;week&quot;) %&gt;% 
+  pivot_longer(cols = -week, names_to = &quot;day&quot;, values_to = &quot;temp&quot;)
 </code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiRXhhY3RseSB0aGUgc2FtZVwiXG5bMV0gXCJFeGFjdGx5IHRoZSBzYW1lXCJcblsxXSBcIkV4YWN0bHkgdGhlIHNhbWVcIlxuWzFdIFwiRXhhY3RseSB0aGUgc2FtZVwiXG5bMV0gXCJFeGFjdGx5IHRoZSBzYW1lXCJcbiJ9 -->
-<pre><code>[1] &quot;Exactly the same&quot;
-[1] &quot;Exactly the same&quot;
-[1] &quot;Exactly the same&quot;
-[1] &quot;Exactly the same&quot;
-[1] &quot;Exactly the same&quot;</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gZm9ydG5pZ2h0X2ZvcmVjYXN0ICU+JSBhc190aWJibGUoKSAlPiUgcm93bmFtZXNfdG9fY29sdW1uKFwid2Vla1wiKSAlPiUgIDogXG4gIGNvdWxkIG5vdCBmaW5kIGZ1bmN0aW9uIFwiJT4lXCJcbiJ9 -->
+<pre><code>Error in fortnight_forecast %&gt;% as_tibble() %&gt;% rownames_to_column(&quot;week&quot;) %&gt;%  : 
+  could not find function &quot;%&gt;%&quot;</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpRdWVzdGlvbiAxLg0KRmluZCB0aGUgd2VhdGhlciBmb3JlY2FzdCBmb3IgdGhlIG5leHQgdGhyZWUgZGF5cyBvbmxpbmUuIENyZWF0ZSBhIGxpc3Qgb2YgbGlzdHMgaW4gd2hpY2ggZWFjaCBpbm5lciBsaXN0IHNob3VsZCBiZSBsYWJlbGxlZCB3aXRoIHRoZSBuYW1lIG9mIHRoZSBkYXkgb2YgdGhlIHdlZWsuIEVhY2ggaW5uZXIgbGlzdCBzaG91bGQgY29udGFpbiBuYW1lZCBlbGVtZW50cyB0ZWxsaW5nIHlvdSB0aGUgdGVtcGVyYXR1cmUsIGNoYW5jZSBvZiByYWluIGFuZCB3aW5kIHNwZWVkLg0KDQpgYGB7cn0NCg0Kd2VhdGhlciA8LSBsaXN0KA0KICAgICAgICAgICAgICAgICJUaHVyc2RheSIgPSBsaXN0KGhpZ2ggPSAxMSwgbG93ID0gOSwgY29yID0gMC43LCB3aW5kID0gNiksDQogICAgICAgICAgICAgICAgIkZyaWRheSIgPSBsaXN0KGhpZ2ggPSAxMiwgbG93ID0gNywgY29yID0gMC43LCB3aW5kID0gOCksDQogICAgICAgICAgICAgICAgIlNhdHVyZGF5IiA9IGxpc3QoaGlnaCA9IDEzLCBsb3cgPSA5LCBjb3IgPSAwLjIsIHdpbmQgPSAxMTUpDQopDQoNCndlYXRoZXINCg0KY2xhc3Mod2VhdGhlcikNCg0KDQpgYGANCg0KUXVlc3Rpb24gMi4NClVzaW5nIHRoZSBsaXN0IHlvdeKAmXZlIGp1c3QgbWFkZSBmaW5kOg0KDQpUaGUgY2hhbmNlIG9mIHJhaW4gdG9tb3Jyb3cNClRoZSB3aW5kIHNwZWVkIG9uIHRoZSBkYXkgYWZ0ZXIgdG9tb3Jyb3cNClRoZSB0ZW1wZXJhdHVyZSB0b21vcnJvdy4NCg0KYGBge3J9DQoNCmxpYnJhcnkodGlkeXZlcnNlKQ0KDQp3ZWF0aGVyJFRodXJzZGF5JGNvcg0KDQp3ZWF0aGVyJEZyaWRheSR3aW5kDQoNCih3ZWF0aGVyJFRodXJzZGF5JGxvdyArIHdlYXRoZXIkVGh1cnNkYXkkaGlnaCkgLyAyDQoNCmBgYA0KDQoNClF1ZXN0aW9uIDMuDQpGaW5kIGEgMTQgZGF5IGZvcmVjYXN0IG9ubGluZSBhbmQgY3JlYXRlIGEgbWF0cml4IG9mIHRoZSBmb3JlY2FzdHMgZm9yIHRlbXBlcmF0dXJlLCB3aGVyZSBlYWNoIHdlZWsgaXMgb25lIHJvdyBhbmQgY29sdW1ucyBjb3JyZXNwb25kIHRvIGRheXMuDQoNCllvdSB3aWxsIHdhbnQgdG8gZ2l2ZSBhIG5hbWUgdG8gdGhlIG1hdHJpeCB5b3UgY3JlYXRlLg0KDQpgYGB7cn0NCmZvcnRuaWdodF9mb3JlY2FzdCA8LSBtYXRyaXgoYygxMSwgMTIsIDEzLCA5LCAxMCwgNSwgNSwgNSwgOSwgMTAsIDExLCAxNSwgMTYsIDE3KSwgbnJvdyA9IDIsIG5jb2wgPSA3KQ0KDQpmb3J0bmlnaHRfZm9yZWNhc3QNCg0KIyBJZiBJIHdhbnRlZCB0byB0cmFuc2ZlciB0byBhIGRhdGEgZnJhbWUgYW5kIGdpdmUgdGhlIGNvbHVtbnMgbmFtZXMsIGhvdyB3b3VsZCBJIGRvIHRoYXQ/DQoNCiAjIGFzLmRhdGEuZnJhbWUoZm9ydG5pZ2h0X2ZvcmVjYXN0KSAlPiUNCiAjICAgbmFtZXMoZm9ydG5pZ2h0X2ZvcmVjYXN0KVsxXSA8LSAid2Vla18wMSINCiAjICAgbmFtZXMoZm9ydG5pZ2h0X2ZvcmVjYXN0KVsyXSA8LSAid2Vla18wMiINCg0KIyBhcy5kYXRhLmZyYW1lKGZvcnRuaWdodF9mb3JlY2FzdCkgJT4lDQojICAgcmVuYW1lKA0KIyAgICAgY29scyA9IHdlZWtfMDEsIHdlZWtfMDINCiMgICApDQoNCmBgYA0KDQpRdWVzdGlvbiA0Lg0KRnJvbSB0aGUgbWF0cml4IHlvdSBqdXN0IG1hZGUgc2VsZWN0Og0KDQpUaGUgdGhpcmQgZGF5IG9mIHRoZSBzZWNvbmQgd2Vlaw0KVGhlIHdob2xlIHNlY29uZCB3ZWVrDQpUaGUgZmlyc3QsIHRoaXJkIGFuZCBmaWZ0aCBkYXlzIGluIGJvdGggd2Vla3MuDQoNCmBgYHtyfQ0KZm9ydG5pZ2h0X2ZvcmVjYXN0WzIsIDNdDQoNCmZvcnRuaWdodF9mb3JlY2FzdFsyLF0NCg0KZm9ydG5pZ2h0X2ZvcmVjYXN0WzIsIGMoMSwzLDUpXQ0KYGBgDQoNClF1ZXN0aW9uIDUuDQpXcml0ZSBhIGZ1bmN0aW9uIHRoYXQgcHJlLWFwcGVuZHMg4oCcVGhlIGFuc3dlciBpczrigJ0gdG8gYW55IGNoYXJhY3RlciBpbnB1dCwgd2hpbGUgZm9yIG51bWVyaWMgaW5wdXQsIGl0IGVpdGhlciBqdXN0IHJldHVybnMgdGhlIG51bWJlciBmb3IgbnVtYmVycyBsZXNzIHRoYW4gMTAsIG9yIGRpdmlkZXMgdGhlIG51bWJlciBieSAxMCBmb3IgbnVtYmVycyBncmVhdGVyIHRoYW4gMTAuIEZvciBhbnl0aGluZyBlbHNlIHJldHVybiDigJxJbnZhbGlkIGlucHV04oCdLg0KDQpgYGB7cn0NCg0KbXV0YXRlX2Fuc3dlcnMgPC0gZnVuY3Rpb24oeCkgew0KICANCiAgaWYoaXMuY2hhcmFjdGVyKHgpKSANCiAgc3RyX2MoIlRoZSBhbnN3ZXIgaXM6IikNCiAgaWYgKGlzLm51bWVyaWMoKSAmICh4IDwgMTApKSANCiAgcHJpbnQoeCkNCiAgaWYgKGlzLm51bWVyaWMoKSAmICh4ID4gMTApKQ0KICBwcmludCh4LzEwKX0NCiAgDQogIGVsc2V7IA0KICBwcmludCgiSW52YWxpZCBpbnB1dCIpDQp9DQogIA0Kb29vd3d3d2VlZSA8LSBjKCJUZW4iLCAiTm90aGluZyIsIDIsIDUsIDIwKQ0KDQpvb293d3d3ZWVlICU+JSBtdXRhdGVfYW5zd2Vycw0KDQogIA0KYGBgDQoNClF1ZXN0aW9uIDYuDQpXcml0ZSBhIGZ1bmN0aW9uIHdoaWNoIGNoZWNrcyBpZiB0d28gdmVjdG9ycyBoYXZlIHRoZSBzYW1lIGVsZW1lbnRzLg0KDQpJZiB0aGV5IGhhdmUgdGhlIHNhbWUgZWxlbWVudHMgaW4gdGhlIHNhbWUgb3JkZXIsIHJldHVybiDigJxFeGFjdGx5IHRoZSBzYW1l4oCdDQpJZiB0aGV5IGhhdmUgdGhlIHNhbWUgZWxlbWVudHMgYnV0IGluIGEgZGlmZmVyZW50IG9yZGVyLCByZXR1cm4g4oCcVGhlIHNhbWXigJ0NCklmIHRoZXkgZG9u4oCZdCBoYXZlIHRoZSBzYW1lIGVsZW1lbnRzLCByZXR1cm4g4oCcRGlmZmVyZW504oCdLg0KDQpgYGB7cn0NCnggPC0gYygxLDIsMyw1LDUpDQp5IDwtIGMoMSwyLDMsNCw1KQ0KDQojIGZvcih4IGluIDE6bnJvdyh4KSA9PSB5IGluIDE6bnJvdyh5KSl7DQojICAgcHJpbnQoIkV4YWN0bHkgdGhlIHNhbWUiKQ0KIyB9DQoNCiMgZm9yICh4IGluIDE6bmNvbCh4KSl7DQojICAgZm9yICh5IGluIDE6bmNvbCh5KSl7DQojICAgICBpZiAoeCA9PSB5KSBuDQojICAgICBwcmludCgiRXhhY3RseSB0aGUgc2FtZSIpDQojICAgfQ0KIyB9DQoNCiMgUGFydCAxDQoNCmZvciAoeCBpbiB5KSB7DQogIGlmKHggJWluJSB5KQ0KICAgIHByaW50KCJFeGFjdGx5IHRoZSBzYW1lIikNCn0NCg0KIyBQYXJ0IDINCg0KZm9yICh4IGluIHkpIHsNCiAgaWYoeCAlaW4lIHkpDQogICAgcHJpbnQoIkV4YWN0bHkgdGhlIHNhbWUiKQ0KfQ0KDQpgYGANCg0K</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpRdWVzdGlvbiAxLg0KRmluZCB0aGUgd2VhdGhlciBmb3JlY2FzdCBmb3IgdGhlIG5leHQgdGhyZWUgZGF5cyBvbmxpbmUuIENyZWF0ZSBhIGxpc3Qgb2YgbGlzdHMgaW4gd2hpY2ggZWFjaCBpbm5lciBsaXN0IHNob3VsZCBiZSBsYWJlbGxlZCB3aXRoIHRoZSBuYW1lIG9mIHRoZSBkYXkgb2YgdGhlIHdlZWsuIEVhY2ggaW5uZXIgbGlzdCBzaG91bGQgY29udGFpbiBuYW1lZCBlbGVtZW50cyB0ZWxsaW5nIHlvdSB0aGUgdGVtcGVyYXR1cmUsIGNoYW5jZSBvZiByYWluIGFuZCB3aW5kIHNwZWVkLg0KDQpgYGB7cn0NCg0Kd2VhdGhlciA8LSBsaXN0KA0KICAgICAgICAgICAgICAgICJUaHVyc2RheSIgPSBsaXN0KGhpZ2ggPSAxMSwgbG93ID0gOSwgY29yID0gMC43LCB3aW5kID0gNiksDQogICAgICAgICAgICAgICAgIkZyaWRheSIgPSBsaXN0KGhpZ2ggPSAxMiwgbG93ID0gNywgY29yID0gMC43LCB3aW5kID0gOCksDQogICAgICAgICAgICAgICAgIlNhdHVyZGF5IiA9IGxpc3QoaGlnaCA9IDEzLCBsb3cgPSA5LCBjb3IgPSAwLjIsIHdpbmQgPSAxMTUpDQopDQoNCndlYXRoZXINCg0KY2xhc3Mod2VhdGhlcikNCg0KDQpgYGANCg0KUXVlc3Rpb24gMi4NClVzaW5nIHRoZSBsaXN0IHlvdeKAmXZlIGp1c3QgbWFkZSBmaW5kOg0KDQpUaGUgY2hhbmNlIG9mIHJhaW4gdG9tb3Jyb3cNClRoZSB3aW5kIHNwZWVkIG9uIHRoZSBkYXkgYWZ0ZXIgdG9tb3Jyb3cNClRoZSB0ZW1wZXJhdHVyZSB0b21vcnJvdy4NCg0KYGBge3J9DQoNCmxpYnJhcnkodGlkeXZlcnNlKQ0KDQp3ZWF0aGVyJFRodXJzZGF5JGNvcg0KDQp3ZWF0aGVyJEZyaWRheSR3aW5kDQoNCih3ZWF0aGVyJFRodXJzZGF5JGxvdyArIHdlYXRoZXIkVGh1cnNkYXkkaGlnaCkgLyAyDQoNCmBgYA0KDQoNClF1ZXN0aW9uIDMuDQpGaW5kIGEgMTQgZGF5IGZvcmVjYXN0IG9ubGluZSBhbmQgY3JlYXRlIGEgbWF0cml4IG9mIHRoZSBmb3JlY2FzdHMgZm9yIHRlbXBlcmF0dXJlLCB3aGVyZSBlYWNoIHdlZWsgaXMgb25lIHJvdyBhbmQgY29sdW1ucyBjb3JyZXNwb25kIHRvIGRheXMuDQoNCllvdSB3aWxsIHdhbnQgdG8gZ2l2ZSBhIG5hbWUgdG8gdGhlIG1hdHJpeCB5b3UgY3JlYXRlLg0KDQpgYGB7cn0NCmZvcnRuaWdodF9mb3JlY2FzdCA8LSBtYXRyaXgoYygxMSwgMTIsIDEzLCA5LCAxMCwgNSwgNSwgNSwgOSwgMTAsIDExLCAxNSwgMTYsIDE3KSwgbnJvdyA9IDIsIG5jb2wgPSA3LCBieXJvdyA9IFRSVUUpDQoNCg0KDQpmb3J0bmlnaHRfZm9yZWNhc3QNCg0KIyBJZiBJIHdhbnRlZCB0byB0cmFuc2ZlciB0byBhIGRhdGEgZnJhbWUgYW5kIGdpdmUgdGhlIGNvbHVtbnMgbmFtZXMsIGhvdyB3b3VsZCBJIGRvIHRoYXQ/DQoNCiAjIGFzLmRhdGEuZnJhbWUoZm9ydG5pZ2h0X2ZvcmVjYXN0KQ0KICMgICBjb2xuYW1lcyhmb3J0bmlnaHRfZm9yZWNhc3QpWzFdIDwtICJ3ZWVrXzAxIg0KICMgICByb3duYW1lcyhmb3J0bmlnaHRfZm9yZWNhc3QpWzJdIDwtICJ3ZWVrXzAyIg0KDQojIGFzLmRhdGEuZnJhbWUoZm9ydG5pZ2h0X2ZvcmVjYXN0KSAlPiUNCiMgICByZW5hbWUoDQojICAgICBjb2xzID0gd2Vla18wMSwgd2Vla18wMg0KIyAgICkNCg0KbGlicmFyeShtYWdyaXR0cikNCg0KIyBmaW5kRnVuY3Rpb24oInBpdm90X2xvbmdlciIpDQoNCiAgYXNfdGliYmxlKGZvcnRuaWdodF9mb3JlY2FzdCkgJT4lIA0KICByb3duYW1lc190b19jb2x1bW4oIndlZWsiKSAlPiUgDQogIHBpdm90X2xvbmdlcihjb2xzID0gLXdlZWssIG5hbWVzX3RvID0gImRheSIsIHZhbHVlc190byA9ICJ0ZW1wIikpDQoNCiMgSm9obnMgdmV5ciBoZWxwZnVsIGFuc3dlcg0KDQojIGNyZWF0ZSBhIG1hdHJpeA0KbSA8LSBtYXRyaXgoc2FtcGxlKDEwMCwgMTQsIFQpLCAyLCA3KQ0KIyBhZGQgcm93bmFtZXMgYWZ0ZXJ3YXJkcw0Kcm93bmFtZXMobSkgPC0gcGFzdGUwKOKAmHdrIOKAmSwgMToyKQ0KIyBhZGQgcm93bmFtZXMgYXQgdGhlIHNhbWUgdGltZSB0aGF0IHlvdSBjcmVhdGUgdGhlIG1hdHJpeA0KbSA8LSBtYXRyaXgoc2FtcGxlKDEwMCwgMTQsIFQpLCAyLCA3LA0KICAgICAgICAgICAgZGltbmFtZXMgPSBsaXN0KHBhc3RlMCjigJh3ay3igJksIDE6MiksDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgYyjigJht4oCZLCDigJh04oCZLOKAmHfigJks4oCYdOKAmSzigJhm4oCZLOKAmHPigJks4oCYc+KAmSkpKQ0KIyBjb252ZXJ0IG1hdHJpeCB0byBkZg0KYXMuZGF0YS5mcmFtZShtKQ0KIyB0byB0cmFuc3Bvc2UgKGJpdCBsaWtlIHBpdm90X2xvbmdlcikgdGhlIG1hdHJpeA0KdChtKQ0KYXMuZGF0YS5mcmFtZSh0KG0pKQ0KDQpgYGANCg0KUXVlc3Rpb24gNC4NCkZyb20gdGhlIG1hdHJpeCB5b3UganVzdCBtYWRlIHNlbGVjdDoNCg0KVGhlIHRoaXJkIGRheSBvZiB0aGUgc2Vjb25kIHdlZWsNClRoZSB3aG9sZSBzZWNvbmQgd2Vlaw0KVGhlIGZpcnN0LCB0aGlyZCBhbmQgZmlmdGggZGF5cyBpbiBib3RoIHdlZWtzLg0KDQpgYGB7cn0NCmZvcnRuaWdodF9mb3JlY2FzdFsyLCAzXQ0KDQpmb3J0bmlnaHRfZm9yZWNhc3RbMixdDQoNCmZvcnRuaWdodF9mb3JlY2FzdFssIGMoMSwzLDUpXQ0KYGBgDQoNClF1ZXN0aW9uIDUuDQpXcml0ZSBhIGZ1bmN0aW9uIHRoYXQgcHJlLWFwcGVuZHMg4oCcVGhlIGFuc3dlciBpczrigJ0gdG8gYW55IGNoYXJhY3RlciBpbnB1dCwgd2hpbGUgZm9yIG51bWVyaWMgaW5wdXQsIGl0IGVpdGhlciBqdXN0IHJldHVybnMgdGhlIG51bWJlciBmb3IgbnVtYmVycyBsZXNzIHRoYW4gMTAsIG9yIGRpdmlkZXMgdGhlIG51bWJlciBieSAxMCBmb3IgbnVtYmVycyBncmVhdGVyIHRoYW4gMTAuIEZvciBhbnl0aGluZyBlbHNlIHJldHVybiDigJxJbnZhbGlkIGlucHV04oCdLg0KDQpgYGB7cn0NCg0KbGlicmFyeSh0aWR5dmVyc2UpDQoNCm11dGF0ZV9hbnN3ZXJzIDwtIGZ1bmN0aW9uKHgpIHsNCiAgDQogIGlmKGlzLmNoYXJhY3Rlcih4KSl7DQogICAgcmV0dXJuKHN0cl9jKCJUaGUgYW5zd2VyIGlzOiIsIHgpKQ0KICB9DQogIA0KICBpZiAoaXMubnVtZXJpYyh4KSAmICh4IDwgMTApKQ0KICAgIHByaW50KHgpDQogIA0KICBpZiAoaXMubnVtZXJpYyh4KSAmICh4ID4gMTApKQ0KICAgIHByaW50KHgvMTApDQogIA0KICBlbHNlIHsNCiAgcHJpbnQoIkludmFsaWQgaW5wdXQiKQ0KICB9DQp9DQoNCm11dGF0ZV9hbnN3ZXJzKCJibG9vYiIpDQoNCiMgVGhpcyBhbnN3ZXIgYWJvdmUgaGFzIGJlZW4gY29ycmVjdGVkDQoNCiMgICBpZiAoaXMubnVtZXJpYyh4KSkgew0KIyAgICAgaWYgKHggPCAxMCkgew0KIyAgICAgICByZXR1cm4oeCkNCiMgICAgIH0gZWxzZSB7DQojICAgICAgIHJldHVybih4IC8gMTApDQojICAgICB9DQojICAgfQ0KIyANCiMgICByZXR1cm4oIkludmFsaWQgaW5wdXQiKQ0KIyB9DQoNCg0KICANCmBgYA0KDQpRdWVzdGlvbiA2Lg0KV3JpdGUgYSBmdW5jdGlvbiB3aGljaCBjaGVja3MgaWYgdHdvIHZlY3RvcnMgaGF2ZSB0aGUgc2FtZSBlbGVtZW50cy4NCg0KSWYgdGhleSBoYXZlIHRoZSBzYW1lIGVsZW1lbnRzIGluIHRoZSBzYW1lIG9yZGVyLCByZXR1cm4g4oCcRXhhY3RseSB0aGUgc2FtZeKAnQ0KSWYgdGhleSBoYXZlIHRoZSBzYW1lIGVsZW1lbnRzIGJ1dCBpbiBhIGRpZmZlcmVudCBvcmRlciwgcmV0dXJuIOKAnFRoZSBzYW1l4oCdDQpJZiB0aGV5IGRvbuKAmXQgaGF2ZSB0aGUgc2FtZSBlbGVtZW50cywgcmV0dXJuIOKAnERpZmZlcmVudOKAnS4NCg0KYGBge3J9DQp4IDwtIGMoMSwyLDMsNSw1KQ0KeSA8LSBjKDEsMiwzLDQsNSkNCg0KIyBmb3IoeCBpbiAxOm5yb3coeCkgPT0geSBpbiAxOm5yb3coeSkpew0KIyAgIHByaW50KCJFeGFjdGx5IHRoZSBzYW1lIikNCiMgfQ0KDQojIGZvciAoeCBpbiAxOm5jb2woeCkpew0KIyAgIGZvciAoeSBpbiAxOm5jb2woeSkpew0KIyAgICAgaWYgKHggPT0geSkgbg0KIyAgICAgcHJpbnQoIkV4YWN0bHkgdGhlIHNhbWUiKQ0KIyAgIH0NCiMgfQ0KDQojIFBhcnQgMQ0KDQpmb3IgKHggaW4geSkgew0KICBpZih4ICVpbiUgeSkNCiAgICBwcmludCgiRXhhY3RseSB0aGUgc2FtZSIpDQp9DQoNCiMgUGFydCAyDQoNCmZvciAoeCBpbiB5KSB7DQogIGlmKHggJWluJSB5KQ0KICAgIHByaW50KCJFeGFjdGx5IHRoZSBzYW1lIikNCn0NCg0KIyBKb2hucyBleGFtcGxlcyBvZiBwcm9kdWNpbmcgbWF0cmljZXMuDQoNCjE6MTIgJW8lIDE6MTINCg0Kb3V0ZXIoMToxMiwgbGV0dGVyc1sxOjEyXSwgInBhc3RlIikNCg0KYGBgDQoNCg==</div>
 
 
 
