@@ -1,0 +1,122 @@
+-- MVP
+
+-- Q1 (a)
+
+SELECT 
+	e.first_name,
+	e.last_name,
+	t.name 
+FROM employees AS e INNER JOIN teams AS t
+ON e.team_id = t.id;
+
+-- Q1 (b)
+
+SELECT 
+	e.first_name,
+	e.last_name,
+	t.name 
+FROM employees AS e INNER JOIN teams AS t
+ON e.team_id = t.id
+WHERE e.pension_enrol = TRUE;
+
+-- Q1 (C)
+
+SELECT 
+	e.first_name,
+	e.last_name,
+	t.name 
+FROM employees AS e INNER JOIN teams AS t
+ON e.team_id = t.id
+WHERE t.charge_cost = '80' OR t.charge_cost= '100';
+
+-- Q2 (A)
+
+SELECT 
+	e.*,
+	pd.local_account_no,
+	pd.local_sort_code 
+FROM employees AS e LEFT JOIN pay_details as pd 
+ON e.pay_detail_id = pd.id;
+
+-- Q2 (B)
+
+SELECT 
+	e.*,
+	pd.local_account_no,
+	pd.local_sort_code,
+	t."name" 
+FROM 
+	(employees AS e LEFT JOIN pay_details as pd 
+ON e.pay_detail_id = pd.id) 
+FULL OUTER JOIN teams AS t
+ON e.team_id = t.id;
+
+-- Q3 (A)
+
+SELECT
+	e.id,
+	t.name
+FROM employees AS e LEFT JOIN teams AS t 
+ON e.team_id = t.id 
+
+-- Q3 (B)
+
+SELECT
+	t.name,
+	COUNT(e.id)
+FROM employees AS e LEFT JOIN teams AS t 
+ON e.team_id = t.id 
+GROUP BY t.name
+
+-- Q3 (C)
+
+SELECT
+	t.name,
+	COUNT(e.id)
+FROM employees AS e LEFT JOIN teams AS t 
+ON e.team_id = t.id 
+GROUP BY t.name
+ORDER BY COUNT ASC
+
+-- Q4 (A)
+
+SELECT 
+	t.id,
+	t.name,
+	COUNT(e.id)
+FROM employees AS e LEFT JOIN teams AS t 
+ON e.team_id = t.id 
+GROUP BY t.name, t.id;
+
+-- Q4 (B)
+
+SELECT 
+	t.id AS team_id,
+	t.name AS team_name,
+	COUNT(e.id) AS employee_count,
+	CAST(charge_cost AS INT)*COUNT(e.id) AS total_day_charge
+FROM teams AS t LEFT JOIN employees AS e 
+ON t.id = e.team_id 
+GROUP BY t.id;
+
+SELECT
+	CAST(charge_cost AS INTEGER)
+FROM teams
+
+-- Order of Execution 
+
+-- Q4 (C)
+SELECT *
+FROM (SELECT 
+	t.id AS team_id,
+	t.name AS team_name,
+	COUNT(e.id) AS employee_count,
+	CAST(charge_cost AS INT) * COUNT(e.id) AS total_day_charge
+FROM teams AS t LEFT JOIN employees AS e
+ON t.id = e.team_id 
+GROUP BY t.id) AS something_strange
+WHERE something_strange.total_day_charge > 5000;
+
+-- Q5 (A)
+
+

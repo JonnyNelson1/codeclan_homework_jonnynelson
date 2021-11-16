@@ -105,7 +105,7 @@ WHERE country NOT IN ('france', 'germany') AND pension_enrol = TRUE
 /* Q14 */
 
 SELECT
-	AVG(salary) AS average_salary
+	MAX(salary) AS max_salary
 FROM employees 
 WHERE country NOT IN ('france', 'germany') AND 
 	  pension_enrol = TRUE AND 
@@ -132,3 +132,13 @@ GROUP BY
 	salary
 -- ALTER TABLE employees
 -- RENAME COLUMN fte_hours TO full_time_equivalent_hours;
+	
+-- The Actual Answer
+	
+SELECT 
+  first_name,
+  last_name,
+  fte_hours,
+  salary,
+  fte_hours * salary AS effective_yearly_salary
+FROM employees
