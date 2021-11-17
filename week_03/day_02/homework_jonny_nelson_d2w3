@@ -5,7 +5,7 @@
 SELECT 
 	e.first_name,
 	e.last_name,
-	t.name 
+	t.name AS team_name
 FROM employees AS e INNER JOIN teams AS t
 ON e.team_id = t.id;
 
@@ -14,7 +14,7 @@ ON e.team_id = t.id;
 SELECT 
 	e.first_name,
 	e.last_name,
-	t.name 
+	t.name AS team_name
 FROM employees AS e INNER JOIN teams AS t
 ON e.team_id = t.id
 WHERE e.pension_enrol = TRUE;
@@ -24,10 +24,12 @@ WHERE e.pension_enrol = TRUE;
 SELECT 
 	e.first_name,
 	e.last_name,
-	t.name 
+	t.name AS team_name
 FROM employees AS e INNER JOIN teams AS t
 ON e.team_id = t.id
 WHERE t.charge_cost = '80' OR t.charge_cost= '100';
+
+-- WHERE CAST(t.charge AS INT) > 80
 
 -- Q2 (A)
 
@@ -44,39 +46,41 @@ SELECT
 	e.*,
 	pd.local_account_no,
 	pd.local_sort_code,
-	t."name" 
+	t."name" AS team_name
 FROM 
 	(employees AS e LEFT JOIN pay_details as pd 
 ON e.pay_detail_id = pd.id) 
 FULL OUTER JOIN teams AS t
 ON e.team_id = t.id;
 
+-- Use LEFT JOIN for the 2nd join
+
 -- Q3 (A)
 
 SELECT
-	e.id,
-	t.name
+	e.id AS employee_id,
+	t.name AS team_name
 FROM employees AS e LEFT JOIN teams AS t 
 ON e.team_id = t.id 
 
 -- Q3 (B)
 
 SELECT
-	t.name,
+	t.name AS team_name,
 	COUNT(e.id)
 FROM employees AS e LEFT JOIN teams AS t 
 ON e.team_id = t.id 
-GROUP BY t.name
+GROUP BY t.name;
 
 -- Q3 (C)
 
 SELECT
 	t.name,
-	COUNT(e.id)
+	COUNT(e.id) AS num_employees
 FROM employees AS e LEFT JOIN teams AS t 
 ON e.team_id = t.id 
 GROUP BY t.name
-ORDER BY COUNT ASC
+ORDER BY num_employees ASC
 
 -- Q4 (A)
 
@@ -87,6 +91,13 @@ SELECT
 FROM employees AS e LEFT JOIN teams AS t 
 ON e.team_id = t.id 
 GROUP BY t.name, t.id;
+
+/* If you GROUP BY teams.id, because it’s the primary key, 
+ * you can SELECT any other column of teams that you want 
+ * (this is an exception to the rule that normally you can only SELECT a column that you GROUP BY).
+*/
+
+-- should be an INNER JOIN, gives same result however
 
 -- Q4 (B)
 
@@ -106,6 +117,7 @@ FROM teams
 -- Order of Execution 
 
 -- Q4 (C)
+
 SELECT *
 FROM (SELECT 
 	t.id AS team_id,
@@ -117,6 +129,29 @@ ON t.id = e.team_id
 GROUP BY t.id) AS something_strange
 WHERE something_strange.total_day_charge > 5000;
 
--- Q5 (A)
+-- A HAVING clause has been used here instead
+
+-- Q5
+
+SELECT
+	COUNT(DISTINCT(employee_id)) AS num_of_emp_on_comittees
+FROM employees_committees
+
+-- Q6
+
+SELECT 
+	 COUNT(*) AS no_not_in_committees
+FROM employees AS e LEFT JOIN employees_committees AS ec 
+ON e.id = ec.employee_id 
+WHERE ec.employee_id IS NULL 
+
+SELECT 
+  (SELECT COUNT(id) FROM employees) -
+  (SELECT COUNT(DISTINCT(employee_id)) 
+ FROM employees_committees) AS num_not_in_committees
+ 
+ 
+
+
 
 

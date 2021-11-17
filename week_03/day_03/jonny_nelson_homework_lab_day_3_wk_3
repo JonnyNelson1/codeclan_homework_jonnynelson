@@ -1,0 +1,169 @@
+-- Homework Week 3 Day 3
+
+-- MVP 
+
+-- Q1
+
+SELECT
+	COUNT(id)
+FROM employees 
+WHERE grade IS NULL AND salary IS NULL;
+
+-- Q2
+
+SELECT 
+      department, 
+      CONCAT(first_name, ' ', last_name) AS employees_full_name
+FROM employees
+WHERE first_name IS NOT NULL AND last_name IS NOT NULL
+ORDER BY department ASC, last_name ASC;
+
+-- Q3
+
+SELECT*
+FROM employees 
+WHERE last_name ILIKE 'A%'
+ORDER BY salary DESC NULLS LAST;
+
+-- Q4	
+
+SELECT 
+	department,
+	COUNT(id) AS no_of_employees_started_in_2003
+FROM employees 
+WHERE start_date BETWEEN '01-01-2003' AND '12-31-2003'
+GROUP BY department;
+
+-- Q5
+
+SELECT 
+	COUNT(id) AS no_of_employees,
+	department,
+	fte_hours
+FROM employees 
+GROUP BY fte_hours, department 
+ORDER BY department, fte_hours ASC 
+
+-- Q6
+
+SELECT
+	pension_enrol,
+	COUNT(pension_enrol) AS count_of_employees
+FROM employees
+GROUP BY pension_enrol 
+
+-- Q7
+
+SELECT *
+FROM employees
+WHERE department = 'Accounting' AND pension_enrol = FALSE
+ORDER BY salary DESC NULLS LAST
+LIMIT 1;
+
+-- Q8
+
+SELECT 
+	country, 
+	COUNT(id) AS number_of_employees_in_country,
+	AVG(salary) 
+FROM employees
+GROUP BY country
+HAVING COUNT(id) > 30
+ORDER BY AVG(salary) DESC NULLS LAST
+
+-- Q9 
+
+SELECT 
+	first_name,
+	last_name,
+	fte_hours,
+	salary,
+	(fte_hours * salary) AS effective_yearly_salary
+FROM employees 	
+WHERE (fte_hours * salary) > 30000;
+
+-- Q10
+
+SELECT 
+	e.*,
+	t.name
+FROM employees AS e LEFT JOIN teams AS t 
+ON e.team_id = t.id 
+WHERE t.name = 'Data Team 1' OR t.name = 'Data Team 2'
+
+-- Q11
+
+SELECT 
+	e.first_name,
+	e.last_name,
+	pd.local_tax_code
+FROM employees AS e LEFT JOIN pay_details AS pd
+ON e.id = pd.id 
+WHERE pd.local_tax_code IS NULL
+
+-- Q12
+
+SELECT
+	e.id,
+	e.first_name,
+	e.last_name,
+	t.charge_cost,
+	(48 * 35 * CAST((t.charge_cost) AS INT) - e.salary) * e.fte_hours AS expected_profit 
+FROM employees AS e LEFT JOIN teams AS t
+ON e.team_id = t.id  
+ORDER BY (48 * 35 * CAST((t.charge_cost) AS INT) - e.salary) * e.fte_hours DESC NULLS LAST
+
+-- Q13
+
+SELECT 
+	first_name,
+	last_name,
+	salary,
+	fte_hours 
+FROM employees
+WHERE country = 'Japan' AND fte_hours IN (
+  SELECT fte_hours
+  FROM employees
+  GROUP BY fte_hours
+  HAVING COUNT(*) = (
+    SELECT MIN(count)
+    FROM (
+      SELECT COUNT(*) AS count
+      FROM employees
+      GROUP BY fte_hours
+    ) AS temp
+  )
+)
+ORDER BY salary ASC 
+LIMIT 1;
+
+-- Q14
+
+SELECT
+	department,
+	COUNT(id) AS employee_first_name_null
+FROM employees 
+WHERE first_name IS NULL
+GROUP BY department 
+HAVING COUNT(id) >= 2
+ORDER BY COUNT(id) desc, department ;
+
+-- Q15
+
+SELECT 
+	first_name,
+	COUNT(id)	
+FROM employees
+WHERE first_name IS NOT NULL 
+GROUP BY first_name 
+HAVING COUNT(id) >= 2
+ORDER BY COUNT(id) DESC, first_name 
+
+-- Q16
+
+SELECT 
+	department ,
+	CAST(SUM(CAST(grade = '1' AS INT)) / CAST(COUNT(id) AS REAL)AS DECIMAL(10,2)) AS proportion_in_grade_1
+FROM employees
+GROUP BY department 
+
