@@ -1,0 +1,112 @@
+---
+title: "Exploration"
+author: "Jonny Nelson"
+date: "27/11/2021"
+output: html_document
+---
+
+```{r}
+library(here)
+
+library(tidyverse)
+
+library(janitor)
+```
+
+```{r}
+disaster_data <-  read_csv("disasters_with_errors.csv")
+```
+
+# Observations about the data
+
+```{r}
+# Using the unique function to look at the different values in the data set (handy)
+
+unique(disaster_data$disaster_type)
+
+# year - seems fine
+# disaster type - miscellaneous (and Miscelaneous) accident, Drought (and Droght)
+# iso - CHINA - needs changed -> PRC (Thought, could do a str_extract, anything not 3 cap letters) already as CHN
+# There is an NA as well
+
+
+
+mutate(iso = str_replace_all(string = iso,
+                             pattern = "[CHINA]",
+                             replacement = "CHN")) %>%
+
+iso_names <- <- str_c("")
+
+disaster_data %>%
+str_extract(country_name, "[a-z]")
+
+# come back to the str_extract
+
+# "Cabo Verde" -> Cape Verde
+# "United States of America (the)" -> take the (the) away
+# Take away everything in the brackets#
+
+clean_disasters <- disaster_data %>%
+  
+  
+# country names
+  
+  
+  
+  mutate(country_name = str_replace_all(string = country_name,
+                                        pattern = "\\((.*?)\\)",
+                                        replacement = "")) %>%
+  mutate(country_name = str_replace_all(string = country_name,
+                                        pattern = "\\,.*$",
+                                        replacement = "")) %>%
+  mutate(across(where(is.character), str_trim)) %>%
+  
+  
+# iso
+  
+  
+  mutate(iso = str_replace_all(string = iso,
+                               pattern = "CHINA",
+                               replacement = "CHN")) %>%
+  
+# distaster_type 
+  
+
+  mutate(disaster_type = str_replace_all(string = disaster_type,
+                                         pattern = "Droght",
+                                         replacement = "Drought")) %>%
+  mutate(disaster_type = str_replace_all(string = disaster_type,
+                                         pattern = "Miscelaneous accident",
+                                         replacement = "Miscellaneous accident")) %>%
+  mutate(disaster_type = str_replace_all(string = disaster_type,
+                                         pattern = "Mass movement \\(dry\\)",
+                                         replacement = "Landslide")) 
+
+
+# So many missing values, actually so hard to know what to do with that.
+
+# Could replace all NA values across all columns with that columns respective 
+# mean.
+
+#    mutate(count = ifelse(is.na(count), 1, count)) %>%
+
+# verify values fall within a given range
+
+
+
+
+
+
+# need to trim white-space as well
+
+unique(clean_disasters$country_name)
+
+
+glimpse(disaster_data)
+
+# clean_disasters %>%
+#   select(iso, country_name, occurrence) %>%
+#   filter(is.na(clean_disasters$iso))
+# ```
+
+
