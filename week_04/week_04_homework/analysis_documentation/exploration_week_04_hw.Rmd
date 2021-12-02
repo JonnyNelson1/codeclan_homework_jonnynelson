@@ -33,9 +33,7 @@ unique(disaster_data$disaster_type)
 
 mutate(iso = str_replace_all(string = iso,
                              pattern = "[CHINA]",
-                             replacement = "CHN")) %>%
-
-iso_names <- <- str_c("")
+                             replacement = "CHN")) %
 
 disaster_data %>%
 str_extract(country_name, "[a-z]")
@@ -46,13 +44,15 @@ str_extract(country_name, "[a-z]")
 # "United States of America (the)" -> take the (the) away
 # Take away everything in the brackets#
 
+russia_names <- str_c("Soviet Union", "Russian Federation", sep = "|")
+
+yemen_names <- str_c("Yemen P Dem Rep", "Yemen Arab Rep", sep = "|")
+
 clean_disasters <- disaster_data %>%
+  select(-c(9:12)) %>%
   
-  
-# country names
-  
-  
-  
+  mutate(total_deaths = if_else(total_deaths >= 1 & total_deaths <= 5000000, total_deaths, as.numeric(NA))) %>%
+  mutate(affected = if_else(affected >= 1 & affected <= 300000300, affected, as.numeric(NA))) %>%
   mutate(country_name = str_replace_all(string = country_name,
                                         pattern = "\\((.*?)\\)",
                                         replacement = "")) %>%
@@ -62,9 +62,67 @@ clean_disasters <- disaster_data %>%
   mutate(across(where(is.character), str_trim)) %>%
   
   
-# iso
+# Specific countries re-assigned 
+  
+  mutate(country_name = if_else(str_detect(country_name, russia_names), "Russia", country_name)) %>%
+  mutate(country_name = if_else(str_detect(country_name, yemen_names), "Yemen", country_name)) %>%
+  
+  mutate(country_name = str_replace_all(string = country_name,
+                                        pattern = "Cabo Verde",
+                                        replacement = "Cape Verde")) %>%
+  mutate(country_name = str_replace_all(string = country_name,
+                                        pattern = "Hong Kong",
+                                        replacement = "China")) %>%
+  mutate(country_name = str_replace_all(string = country_name,
+                                        pattern = "Viet Nam",
+                                        replacement = "Vietnam")) %>%
+    mutate(country_name = str_replace_all(string = country_name,
+                                        pattern = "Canary is",
+                                        replacement = "Canary Islands")) %>%
+    mutate(country_name = str_replace_all(string = country_name,
+                                        pattern = "Virgin Island",
+                                        replacement = "Virgin Islands")) %>%
+    mutate(country_name = str_replace_all(string = country_name,
+                                        pattern = "Virgin Island",
+                                        replacement = "Virgin Islands")) %>%
+   mutate(country_name = str_replace_all(string = country_name,
+                                        pattern = "Germany Fed Rep",
+                                        replacement = "Germany")) %>%
+   mutate(country_name = str_replace_all(string = country_name,
+                                        pattern = "United Kingdom of Great Britain and Northern Irela",
+                                        replacement = "United Kingdom")) %>%
   
   
+# Dealing with missing values
+  
+   mutate(occurrence = ifelse(is.na(occurrence), 1, occurrence)) %>%
+   mutate(total_deaths = coalesce(total_deaths, median(total_deaths, na.rm = TRUE))) %>%
+   mutate(affected = coalesce(affected, median(affected, na.rm = TRUE)))
+
+glimpse(clean_disasters)
+  
+  
+  
+  
+  
+  
+  
+# unique(clean_disasters$country_name)  
+
+
+# "Cabo Verde" = "Cape Verde"
+# "Soviet Union", "Russian Federation",  = 
+# "Hong Kong" = "China"
+# "Viet Nam"
+# "Canary Is" = "Canaray Islands"
+# "Yemen Arab Rep" = "Yemen"
+# R?union = "Reunion Island"
+# Ivory Coast
+# "Yemen P Dem Rep" = "Yemen"
+# "Yugoslavia" = "Bosnia and Herzegovina, Croatia, Macedonia, Slovenia, and the Federal Republic of ..."
+# "Virgin Island" = "Virgin Islands"
+# "Germany Fed Rep" = "Germany"
+# "United Kingdom of Great Britain and Northern Irela" = "United Kingdom"
   mutate(iso = str_replace_all(string = iso,
                                pattern = "CHINA",
                                replacement = "CHN")) %>%
@@ -92,21 +150,44 @@ clean_disasters <- disaster_data %>%
 
 # verify values fall within a given range
 
+# total deaths - verify if in certain range  1 - 5,000,000
+
+mutate(total_deaths = if_else(total_deaths > 1 & total_deaths < 5000000, total_deaths, as.numeric(NA)))
+
+  mutate(age = if_else(age >= 2 & age <= 100, age, as.numeric(NA)))
+
+# affected - verify within 1 - 300000300	
+  
+  mutate(affected = if_else(affected > 1 & affected < 300000300, affected, as.numeric(NA)))
+
+
+
+# get ride of anything after this 
+
+names(clean_disasters)
+
+select(-c(10:12))
 
 
 
 
+
+
+
+
+
+
+getwd()
 
 # need to trim white-space as well
 
-unique(clean_disasters$country_name)
+unique(clean_disasters$)
 
 
-glimpse(disaster_data)
+clean_disasters %>%
+  slice_max(total_deaths)
 
 # clean_disasters %>%
 #   select(iso, country_name, occurrence) %>%
 #   filter(is.na(clean_disasters$iso))
-# ```
-
-
+```
