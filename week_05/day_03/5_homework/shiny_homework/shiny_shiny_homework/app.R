@@ -32,7 +32,7 @@ ui <- fluidPage(
   ),
   
   fluidPage(
-    img(src = "www/glootie.gif",
+    img(src = "glootie.gif",
         # align = "left",
         height = 352,
         width = 640)
