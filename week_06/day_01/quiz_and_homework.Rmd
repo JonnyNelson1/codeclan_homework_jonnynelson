@@ -124,26 +124,19 @@ four_dice_roll_calc / nrow(four_dice_roll)
 ```{r}
 # Five chairs are placed in a row in a room, along with five people of differing height. The people sit down randomly on the chairs. What is the probability that they sit in order of decreasing height, left to right?
 
-# create vector of choices contains ten employees, n = 10. 
+# create vector of choices contains five heights, n = 5. 
 heights <- c(150, 180, 160, 170, 190)
 
-# Choose three at a time, r = 3
-# Don't replace an employee once chosen: repeats.allowed = FALSE
 chairs <- as_tibble(permutations(n = 5,
-                                 r = 2,
+                                 r = 5,
                                  v = heights,
                                  repeats.allowed = FALSE))
 
-# rename the variables in seniors to something better
-seniors <- seniors %>%
-  rename(
-    CEO = V1,
-    CTO = V2,
-    COO = V3
-  )
+chair_order <- chairs %>%
+  filter(V1 > V2, V2 > V3, V3 > V4, V4 > V5) %>%
+  summarise(prob = n() / nrow(chairs))
 
-# let's see what the seniors matrix looks like
-seniors
+
 ```
 
 ```{r}

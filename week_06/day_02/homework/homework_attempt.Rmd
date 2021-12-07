@@ -1,0 +1,147 @@
+---
+title: "homework"
+author: "Jonny Nelson"
+date: "07/12/2021"
+output: html_document
+---
+
+# Question 1
+
+```{r}
+library(prob)
+library(tidyverse)
+library(janitor)
+library(e1071)
+
+data <- read_csv("data/20190928-items.csv") %>%
+  clean_names()
+
+data
+
+glimpse(data)
+
+summary(data)
+
+```
+
+# Question 2
+
+```{r}
+
+data_q2 <- data %>%
+  mutate(id = nrow(data)) %>%
+  group_by(brand) %>%
+  summarise(desc(count(n())))
+
+data_q2
+
+```
+
+# Question 3
+
+```{r}
+#Taking a look at the histogram
+
+data_q3 <- data %>%
+  filter(brand == "Samsung") %>%
+  ggplot() +
+  aes(x = rating, fill = "blue") +
+  geom_bar()
+  
+
+data_q3
+  
+```
+
+```{r}
+# Finding the summary statistics to fit the normal distribution 
+
+summary_stats <- data %>%
+  filter(brand == "Samsung") %>%
+  summarise(
+    num = n(),
+    mean = mean(rating),
+    sd = sd(rating)
+  )
+
+summary_stats
+```
+```{r}
+# Fitting the normal distribution to the plot
+
+data_q3 <- data %>%
+  
+  filter(brand == "Samsung") %>%
+  ggplot(aes(x = rating, fill = "red")) +
+  geom_histogram(aes(y = ..density..), col = "white", bins = 25) +
+  stat_function(
+    fun = dnorm,
+    args = list(
+      mean = summary_stats$mean,
+      sd = summary_stats$sd
+    ),
+    col = "blue"
+  )
+  
+
+data_q3
+```
+
+# Question 4
+
+```{r}
+data_q4 <- data %>%
+  filter(brand == "Samsung") 
+
+# Proportion within 1 standard deviation
+
+prop_within_1sd <- data_q4 %>%
+  filter(rating >= summary_stats$mean - summary_stats$sd) %>%
+  filter(rating <= summary_stats$mean + summary_stats$sd) %>%
+  summarise(prop_within_1sd = n() / nrow(data_q4)) %>%
+  pull()
+```
+
+```{r}
+# Proportion within 2 standard deviation
+
+prop_within_2sd <- data_q4 %>%
+  filter(rating >= summary_stats$mean - 2*summary_stats$sd) %>%
+  filter(rating <= summary_stats$mean + 2*summary_stats$sd) %>%
+  summarise(prop_within_2sd = n() / nrow(data_q4)) %>%
+  pull()
+```
+
+```{r}
+# Proportion within 3 standard deviation
+
+prop_within_3sd <- data_q4 %>%
+  filter(rating >= summary_stats$mean - 3*summary_stats$sd) %>%
+  filter(rating <= summary_stats$mean + 3*summary_stats$sd) %>%
+  summarise(prop_within_3sd = n() / nrow(data_q4)) %>%
+  pull()
+```
+
+```{r}
+# Calculating the normal distribution proportions
+
+normal_distribution_proportions <-
+  c(100 * (pnorm(q = 1) - pnorm(q = -1)), 
+    100 * (pnorm(q = 2) - pnorm(q = -2)),
+    100 * (pnorm(q = 3) - pnorm(q = -3)))
+
+# Putting the proportions of 1sd, 2sd, 3sd into a vector
+
+normal_distribution_proportions_samsung_ratings <-
+  c(prop_within_1sd, prop_within_2sd, prop_within_3sd)
+
+# Table with summary of the differences
+
+summary_data <- 
+  data.frame(normal_distribution_proportions,
+            normal_distribution_proportions_samsung_ratings)
+
+
+
+```
+
