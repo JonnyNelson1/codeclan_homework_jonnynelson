@@ -1,0 +1,195 @@
+---
+title: "quiz_and_homework"
+author: "Jonny Nelson"
+date: "06/12/2021"
+output: html_document
+---
+
+```{r}
+library(prob)
+library(gtools)
+library(tidyverse)
+library(janitor)
+
+northern_irelands_pride_and_joy <- read_csv("5_quiz_and_homework/data/titanic.csv")
+
+unique(northern_irelands_pride_and_joy$class)
+```
+
+
+```{r}
+
+# Conditional Probability that crew & survived
+
+prob_survived_and_crew <- northern_irelands_pride_and_joy %>%
+  filter(class == c("1st", "2nd", "3rd") & 
+         survived == "yes") %>%
+  summarise(prob = n()/ nrow(northern_irelands_pride_and_joy)) %>%
+  pull()
+
+```
+
+```{r}
+
+# Conditional Probability that crew & survived
+
+prob_survived_and_passenger <- northern_irelands_pride_and_joy %>%
+  filter(class != c("engineering crew",
+                    "victualling crew",
+                    "restaurant staff",
+                    "deck crew") & 
+         survived == "no") %>%
+  summarise(prob = n()/ nrow(northern_irelands_pride_and_joy)) %>%
+  pull()
+
+```
+
+
+```{r}
+table <- northern_irelands_pride_and_joy %>%
+  tabyl(class, survived)
+
+table
+```
+
+```{r}
+table <- table %>%
+  adorn_totals(where = c("row", "col"))
+
+table
+```
+
+```{r}
+table <- table %>%
+  adorn_percentages(denominator = "all") %>%
+  adorn_title()
+
+table
+```
+
+# 1.2 Probability Consolidation Questions
+
+## Question 1
+
+```{r}
+# If I roll a six-sided dice once, what is the probability of getting a number less than 5?
+
+one_dice_roll <- rolldie(1)
+
+one_dice_roll %>%
+  filter(X1 < 5) %>%
+  summarise(prob = n() / nrow(one_dice_roll))
+```
+## Question 2
+
+```{r}
+# How many outcomes are there in the sample space of an experiment in which we toss three dice?
+
+three_dice_roll <- rolldie(3) 
+
+three_dice_roll %>%
+  nrow()
+```
+
+## Question 3 
+
+```{r}
+# In an experiment where we roll four dice:
+
+# how many outcomes are in the event where the total of the four dice equals 5, 6 or 7)?
+
+four_dice_roll <- rolldie(4)
+
+four_dice_roll_calc <- four_dice_roll %>%
+  mutate(sum_dice = rowSums(.)) %>%
+  filter(sum_dice == c(5,6,7)) %>%
+  nrow()
+
+four_dice_roll_calc
+```
+
+```{r}
+# what is the probability of this event?
+
+four_dice_roll_calc / nrow(four_dice_roll)
+```
+```{r}
+# what assumptions do we apply in answering part ii?
+
+# Assumption: All results from all dice roll are independent variables 
+```
+
+## Question 4 
+
+```{r}
+# Five chairs are placed in a row in a room, along with five people of differing height. The people sit down randomly on the chairs. What is the probability that they sit in order of decreasing height, left to right?
+
+# create vector of choices contains ten employees, n = 10. 
+heights <- c(150, 180, 160, 170, 190)
+
+# Choose three at a time, r = 3
+# Don't replace an employee once chosen: repeats.allowed = FALSE
+chairs <- as_tibble(permutations(n = 5,
+                                 r = 2,
+                                 v = heights,
+                                 repeats.allowed = FALSE))
+
+# rename the variables in seniors to something better
+seniors <- seniors %>%
+  rename(
+    CEO = V1,
+    CTO = V2,
+    COO = V3
+  )
+
+# let's see what the seniors matrix looks like
+seniors
+```
+
+```{r}
+# Question 5:
+
+# I roll six dice:
+
+roll_six_dice <- rolldie(6)
+
+# what is the probability I see the numbers 6, 5, 4, 3, 2 and 1 in order on the dice, left to right?
+
+roll_a_654321 <- roll_six_dice %>%
+  filter(X1 == 6, X2 == 5, X3 == 4, X4 == 3, X5 == 2, X6 == 1) %>%
+  summarise(prob = n() / nrow(roll_six_dice))
+
+# what is the probability I see one each of the numbers 6, 5, 4, 3, 2 and 1 on the dice regardless of order?
+
+six <- c(1,2,3,4,5,6)
+
+roll_a_654321_in_any_combination <- as_tibble(permutations(n = 6,
+                                                 r= 6,
+                                                 v = six,
+                                                 repeats.allowed = FALSE))
+
+nrow(roll_a_654321_in_any_combination) / nrow(roll_six_dice)
+
+
+  
+```
+
+## Question 6
+
+```{r}
+# If I draw a single card from a 52-card deck, and it is black, what is the probability that its suit is spades?
+
+card_deck <- cards(1) %>%
+  filter(rank != "Joker") 
+
+card_deck
+
+prob_card_spades_if_black <- card_deck %>%
+  mutate(suit = as.character(suit)) %>%
+  filter(suit == c("Spade", "Club"))
+
+prob_card_spades_if_black
+
+unique(card_deck$suit)
+```
+

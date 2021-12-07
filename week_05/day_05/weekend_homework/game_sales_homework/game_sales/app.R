@@ -24,20 +24,20 @@ ui <- fluidPage(
             # A select option for publishers, to filter
             selectInput("publisher_input",
                          "Publisher",
-                         choices = unique(clean_game_sales$publisher))
+                         choices = unique(clean_game_sales$publisher)),
             
-            # Danger button 
-            # knobInput(
-            #     inputId = "myKnob",
-            #     label = "jQuery knob example:",
-            #     value = 100,
-            #     min = 0,
-            #     displayPrevious = TRUE, 
-            #     lineCap = "round",
-            #     fgColor = "#428BCA",
-            #     inputColor = "#428BCA"
-            # )
             
+            knobInput(
+                inputId = "myKnob",
+                label = "jQuery knob example:",
+                value = 100,
+                min = 0,
+                displayPrevious = TRUE,
+                lineCap = "round",
+                fgColor = "#428BCA",
+                inputColor = "#428BCA"
+            )
+
             
         ),
         
