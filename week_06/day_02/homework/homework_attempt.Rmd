@@ -29,9 +29,11 @@ summary(data)
 ```{r}
 
 data_q2 <- data %>%
-  mutate(id = nrow(data)) %>%
   group_by(brand) %>%
-  summarise(desc(count(n())))
+  # summarise(desc(count(n())))
+  summarise(count = n()) %>%
+  arrange(desc(count)) %>%
+  top_n(1)
 
 data_q2
 
@@ -47,7 +49,7 @@ data_q3 <- data %>%
   ggplot() +
   aes(x = rating, fill = "blue") +
   geom_bar()
-  
+
 
 data_q3
   
