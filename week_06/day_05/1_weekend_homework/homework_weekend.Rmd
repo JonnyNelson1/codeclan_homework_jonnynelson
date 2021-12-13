@@ -1,0 +1,176 @@
+---
+title: "weekend_homework"
+author: "Jonny Nelson"
+date: "11/12/2021"
+output: html_document
+---
+
+```{r}
+library(e1071)
+library(tidyverse)
+library(janitor)
+library(prob)
+library(infer)
+data(msleep)
+```
+
+# Question 1 - Explore the data set
+
+```{r}
+glimpse(msleep)
+```
+```{r}
+head(msleep, 100)
+```
+
+# Question 2 - Jabberwockies sleep for around 7 hours a night, on average. Perform an appropriate statistical test to determine whether the mean sleep_total in the sampled population of animal types differs from the typical value for jabberwockies.
+
+# Visualise the data
+
+```{r}
+msleep %>%
+  ggplot(aes(x = sleep_total)) +
+  geom_boxplot()
+```
+
+# Observed mean in the sample
+
+```{r}
+observed_stat <- msleep %>%
+  summarise(mean_sleep_total = mean(sleep_total))
+
+observed_stat
+```
+
+# Null distribution
+
+```{r}
+null_distribution <- msleep %>%
+  specify(response = sleep_total) %>%
+  hypothesise(null = "point", mu = 7) %>%
+  
+  # "mu" is the population mean
+  
+  generate(reps = 10000, type = "bootstrap") %>%
+  calculate(stat = "mean")
+```
+
+# Visualising the Bootstrap Test
+
+```{r}
+null_distribution %>%
+  visualise(bins = 30) +
+  xlab("mean sleep total") +
+  shade_p_value(obs_stat = observed_stat$mean_sleep_total,
+                direction = "left")
+```
+
+# p-value
+
+```{r}
+p_value <- null_distribution %>%
+  get_p_value(obs_stat = observed_stat$mean_sleep_total,
+              direction = "left")
+
+p_value
+```
+
+# Question 3 - Perform an appropriate statistical test to determine whether omnivores sleep for significantly longer than herbivores, on average.
+
+# Data for omnivores and herbivores
+
+```{r}
+unique(msleep$vore)
+
+omnivores <- msleep %>%
+  dplyr::filter(vore == "omni") %>%
+  select(vore, sleep_total)
+
+herbivores <- msleep %>%
+  dplyr::filter(vore == "herbi") %>%
+  select(vore, sleep_total)
+```
+
+# Apend the two data sets
+
+## Here we are going to assume that the two variables are independent
+
+## H0: mu-sleep_total(omni) - mu-sleep_total(herbi) == 0
+## HA: mu-sleep_total(omni) - mu-sleep_total(herbi) > 0
+
+## Significance level alpha  = 0.05
+
+```{r}
+proportions_data <- bind_rows(omnivores, herbivores, .id = "vore") %>%
+  mutate(vore = if_else(vore == "1",
+                            "omni",
+                            "herbi"))
+```
+
+# Visualise the new data
+
+```{r}
+proportions_data %>%
+  ggplot(aes(x = vore, y = sleep_total)) +
+  geom_boxplot()
+```
+
+
+# Null Distribution
+
+```{r}
+null_distributions <- proportions_data %>%
+  specify(sleep_total ~ vore) %>%
+  hypothesise(null = "independence") %>%
+  generate(reps = 10000, type = "permute") %>%
+  calculate(stat = "diff in means",
+            order = c("omni", "herbi"))
+
+null_distributions
+```
+
+# Observed Stat
+
+```{r}
+observed_stat <- proportions_data %>%
+  specify(sleep_total ~ vore) %>%
+  calculate(stat = "diff in means",
+            order = c("omni", "herbi"))
+
+observed_stat
+```
+
+# Visualising the Null Distribution
+
+```{r}
+null_distributions %>%
+  visualise(bins = 30) +
+    shade_p_value(obs_stat = observed_stat,
+                  direction = "right")
+```
+
+# Calculating the p_values
+
+```{r}
+p_value <- null_distributions %>%
+  get_p_value(obs_stat = observed_stat,
+             direction = "right")
+
+p_value
+
+# Not a significant p-value observed therefore fail to reject the null hypothesis.
+```
+
+
+
+# Question 4 - Perform an appropriate statistical test to determine whether the proportion of domesticated animal types in the population of animal types is greater than 5%.
+
+
+```{r}
+animals_domesticated <- msleep %>%
+  select(conservation, )
+  mutate(vore = if_else(vore == "1",
+                            "omni",
+                            "herbi"))
+```
+

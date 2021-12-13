@@ -29,6 +29,10 @@ house_sales %>%
   labs(x = "lot area") +
   xlim(0 , 50000)
 
+house_sales %>%
+  ggplot(aes(x = lot_area)) +
+  geom_boxplot()
+
 # Normally distributed with a severe right-skew
 ```
 
@@ -51,6 +55,11 @@ resample %>%
   geom_histogram(col = "white", fill = "steel blue") +
   labs(x = "mean lot area")
 
+# Answer
+
+bootstrap_dist <- resample %>%
+  visualise(bins = 30)
+
 ```
 
 # Task 4
@@ -68,7 +77,7 @@ infer_ci_95
 # 3. Visualise Distribution and CI
 
 resample %>%
-  visualise(bins = 100) +
+  visualise(bins = 30) +
   shade_confidence_interval(endpoints = infer_ci_95)
 ```
 
@@ -98,7 +107,7 @@ infer_ci_99
 # 3. Visualise Distribution and CI
 
 resample %>%
-  visualise(bins = 100) +
+  visualise(bins = 50) +
   shade_confidence_interval(endpoints = infer_ci_99)
 ```
 
@@ -115,3 +124,4 @@ point_estimate <- resample %>%
 point_estimate
 ```
 
+## Confidence Interval - 95 time out of 100 the confidence interval is going to contain the true value we are looking for

@@ -1,0 +1,55 @@
+---
+title: "Statistics & Hypothesis testing - PDA"
+output:
+  html_document:
+    df_print: paged
+---
+
+For these tasks you will use the `penguins` dataset from the `palmerpenguins` package.
+
+Here is a set-up chunk to get you started:
+
+```{r, message = F, warning = F}
+
+# install.packages("palmerpenguins")
+library(palmerpenguins)
+
+penguins <- palmerpenguins::penguins 
+
+```
+
+ 
+We are interested in how **bill length** differ between the three species of penguin (Adelie, Chinstrap & Gentoo) in this dataset.
+
+# 1. Exploratory analysis 
+
+Explore the dataset using visualisations, and keep in mind the question you're trying to answer above.
+
+**Write a short summary of the results.**
+
+
+# 2. Summary statistics
+
+Calculate the following summary statistics to describe bill length for each species: 
+
+* measures of centrality (mean & median)
+* spread (standard deviation)
+* skewness (you can use the `skewness()` function from the `e1071` package)
+
+**Write a short summary of the results.**
+
+# 3. Hypothesis test & probability
+
+Perform a suitable hypothesis test to check whether the mean bill length of Gentoo is significantly longer than the mean bill length of Adelie. 
+
+Visualise the p-value on the null distribution.
+
+**Write an interpretation of your findings.**
+
+**Note:** To meet the PDA outcome, you'll want to describe how your obtained p-value and null distribution relate to the concept of probability - so try to write a short explanation in your interpretation. You can also expand on probability distributions/anything related to probability to show your understanding of probability. So, rather than simply reporting the p-value and whether it is significant, show you understand what it means.
+
+# PDA outcomes covered by this taks
+
+* 4.1 __Exploratory data analysis__ and targeted data analysis (__hypothesis testing__)
+* 4.3 Probability and __probability distributions__
+* 4.4 Summary statistics including __measures of centrality, spread and skewness__
