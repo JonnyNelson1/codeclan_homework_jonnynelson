@@ -62,7 +62,7 @@ null_distribution %>%
   visualise(bins = 30) +
   xlab("mean sleep total") +
   shade_p_value(obs_stat = observed_stat$mean_sleep_total,
-                direction = "left")
+                direction = "both")
 ```
 
 # p-value
@@ -70,7 +70,7 @@ null_distribution %>%
 ```{r}
 p_value <- null_distribution %>%
   get_p_value(obs_stat = observed_stat$mean_sleep_total,
-              direction = "left")
+              direction = "both")
 
 p_value
 ```
@@ -168,9 +168,9 @@ p_value
 
 ```{r}
 animals_domesticated <- msleep %>%
-  select(conservation, )
-  mutate(vore = if_else(vore == "1",
-                            "omni",
-                            "herbi"))
+  dplyr::filter(!is.na(vore)) %>%
+  mutate(vore_flag = if_else(vore == "omni","1","0")) %>%
+  select(vore_flag, sleep_total) %>%
+  summarise(prop = )
 ```
 
