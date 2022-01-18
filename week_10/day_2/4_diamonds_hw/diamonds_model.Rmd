@@ -1,0 +1,175 @@
+---
+title: "diamonds_model"
+author: "Jonny Nelson"
+date: "18/01/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(janitor)
+library(tidyverse)
+library(fastDummies)
+library(ggfortify)
+library(GGally)
+library(mosaic)
+
+diamonds <- read_csv("data/diamonds.csv")
+
+head(diamonds)
+```
+
+# Understanding the variables 
+
+# price price in US dollars (\$326--\$18,823)
+
+# carat weight of the diamond (0.2--5.01)
+ 
+# cut quality of the cut (Fair, Good, Very Good, Premium, Ideal)
+ 
+# color diamond colour, from J (worst) to D (best)
+
+# clarity a measurement of how clear the diamond is (I1 (worst), SI2, SI1, VS2, VS1, VVS2, VVS1, IF (best))
+ 
+# x length in mm (0--10.74)
+
+# y width in mm (0--58.9)
+
+# z depth in mm (0--31.8)
+
+# depth total depth percentage = z / mean(x, y) = 2 * z / (x + y) (43--79)
+
+# table width of top of diamond relative to widest point (43--95)
+
+
+# Use ggpairs to show if carat is most strongly correlated with x, y and z
+
+```{r}
+diamonds_size <- diamonds %>%
+  select(carat, x, y, z)
+
+# diamonds_size
+
+ggpairs(diamonds_size)
+```
+
+#### * We can see here that carat is highly correlated (always over 95%) with diamond carat.
+
+#### * Carat is the diamond volume and x, y and z make up the dimensions of the diamond. As diamonds are all made from the exact same chemical structure of tetrahedrally bonded carbon the density will all be the same - assuming purity is 100%. 
+
+#### * Density = Mass/Volume
+
+--------------------------------------------------------------------------------
+
+# 3. Drop x, y and z from data set as they are highly correlated to carat
+
+```{r}
+diamonds_clean <- diamonds %>%
+  select(-c(x, y, z))
+
+head(diamonds_clean)
+```
+
+# 4. We are interested in developing a regression model for the price of a diamond in terms of the possible predictor variables in the dataset.
+
+## i. Use ggpairs() to investigate correlations between price and the predictors (this may take a while to run, don’t worry, make coffee or something).
+
+```{r}
+ggpairs(diamonds_clean)
+```
+
+#### * Carat shows appears to be the most highly correlated to price of all variables with a correlation of 0.922, so will be visualised
+
+## ii. Perform further ggplot visualisations of any significant correlations you find.
+
+```{r}
+diamonds_clean %>% 
+  ggplot(aes(x = carat, y = price)) +
+  geom_point(colour = "steel blue", size = 0.25) +
+  ggtitle("Diamond Price vs Carat") 
+
+# Most diamonds in the data set appear to be a specific carat value. Makes sense in terms of selling to customers.
+```
+
+```{r}
+simple_model <- lm(price ~ carat, data = diamonds_clean)
+
+autoplot(simple_model)
+```
+
+#### * The Residuals vs Fitted graph and Scale-Location graph shows our data when plotted for price ~ carat, is hetroskedastic. 
+
+#### * The Normal Q-Q Plot shows that our data has heavy tails
+
+
+# 5. Shortly we may try a regression fit using one or more of the categorical predictors cut, clarity and color, so let’s investigate these predictors. Investigate the levels of these predictors. How many dummy variables do you expect for each of them?
+
+
+#### * All Ordinal Variables
+
+#### * Cut - Fair < Good < Very Good < Premium < Ideal - 4 Dummy variables
+
+#### * Clarity - I1 < SI2 < SI1 < VS2 < VS1 < VVS2 < VVS1 < IF - 7 Dummy Variables
+
+#### * Colour - D < E < F < G < H < I < J - 6 Dummy Variables
+
+```{r, results = FALSE}
+unique(diamonds_clean$cut)
+unique(diamonds_clean$clarity)
+unique(diamonds_clean$color)
+```
+
+# 6. Start with simple linear regression. Regress price on carat and check the regression diagnostics.
+
+```{r}
+summary(simple_model)
+```
+
+#### * The p-value for this simple model is very small, the relationship between price ~ carat is highly statistically significant
+
+#### * The multiple r-squared = 0.85 therefore 85% of the price is explained by the carat. 
+
+#### * A residual standard error means that the carat can explain the price in the linear model with an error of ~ $1550.
+
+#### * This simple model predicts that for every 1 carat increase in the diamond the price will increase by $7756 with an error of $1149.
+
+
+# 7. Add another predictor of your choice. Check your assumptions, diagnostics, and interpret the model.
+
+## Colour looks like it may be predictive of price from the diagnostics plots above so will investigate this one.
+
+```{r}
+diamonds_pivot_wider <- diamonds_clean %>%
+  fastDummies::dummy_cols(
+    select_columns = "color",
+    remove_first_dummy = TRUE,
+    remove_selected_columns = TRUE) %>%
+  clean_names() %>%
+  
+# Need to make the colour into logical variables
+  
+  mutate(across(color_e:color_j, as.logical))
+
+head(diamonds_pivot_wider)
+
+# We do not have the worst colour where = D
+```
+
+```{r}
+new_model <- lm(price ~ carat + color_e, data = diamonds_pivot_wider)
+
+summary(new_model)
+
+autoplot(new_model)
+
+# Doesn't really add anything
+
+# If I could split the colour into above H and below H then it may be more informative 
+
+# G,H,I,J are nearly all colourless
+```
+
