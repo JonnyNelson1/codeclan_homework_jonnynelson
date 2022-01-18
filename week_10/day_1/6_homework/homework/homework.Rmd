@@ -20,17 +20,25 @@ head(project_management)
 
 # Plotting the data 
 
+## Swap y and x 
+
 ```{r}
 project_management %>%
-  ggplot(aes(x = actual_length, y = estimated_length)) +
+  ggplot(aes(x = estimated_length, y = actual_length)) +
   geom_point()
+
+# what is the one we are measuring = actual length
+# what is the one we are trying to predict = estimated length
+
+# actual length depends on estimated length, therefore dependent variable
+
 ```
 
 # Obtaining the correlation co-efficient:
 
 ```{r}
 project_management %>%
-  summarise(cor = cor(estimated_length, actual_length))
+  summarise(cor = cor(actual_length, estimated_length))
 
 # Correlation coefficient = 0.805 - this mean that estimated length is positively correlated with actual_length
 ```
@@ -40,11 +48,11 @@ project_management %>%
 ```{r}
 library(modelr)
 
-new_model <- lm(estimated_length ~ actual_length, project_management)
+new_model <- lm(actual_length ~ estimated_length, project_management)
 
 summary(new_model)
 
-# For every increase by 1 day in the the actual length, the estimated length increases by (0.52921*actual_length) - so maybe 1/2 a day
+# For every increase by 1 day in the the estimated length, the actual length increases by (1.2235*actual_length) with a baseline/intercept 1.4164
 ```
 
 # Diagnostics
@@ -57,3 +65,4 @@ autoplot(new_model)
 # Very strange Residual vs Fitted and Scale-Location
 ```
 
+## 
