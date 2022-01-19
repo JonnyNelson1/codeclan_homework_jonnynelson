@@ -55,6 +55,8 @@ diamonds_size <- diamonds %>%
 # diamonds_size
 
 ggpairs(diamonds_size)
+
+# ggpairs(diamonds[,c("carat", "x", "y", "z")]) works as well
 ```
 
 #### * We can see here that carat is highly correlated (always over 95%) with diamond carat.

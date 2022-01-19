@@ -1,0 +1,147 @@
+---
+title: "Homework - features and elements of multiple regression"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    df_print: paged
+    css: ../../../styles.css
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+knitr::opts_chunk$set(echo = TRUE, fig.align = 'center')
+```
+
+<hr>
+
+# MVP
+
+1. Load the `diamonds.csv` data set and undertake an initial exploration of the data. You will find a description of the meanings of the variables on the relevant [Kaggle page](https://www.kaggle.com/shivam2503/diamonds/)
+
+```{r, message = FALSE}
+diamonds <- read_csv("data/diamonds.csv")
+library(GGally)
+library(tidyverse)
+glimpse(diamonds)
+```
+
+2. We expect the `carat` of the diamonds to be strong correlated with the physical dimensions `x`, `y` and `z`. Use `ggpairs()` to investigate correlations between these four variables.
+
+```{r, message = FALSE}
+ggpairs(diamonds[,c("carat", "x", "y", "z")])
+```
+
+3. So, we do find significant correlations. Let's drop columns `x`, `y` and `z` from the dataset, in preparation to use only `carat` going forward.
+
+```{r}
+diamonds_tidy <- diamonds %>%
+  select(-c("x", "y", "z"))
+
+diamonds_tidy
+```
+
+
+4. We are interested in developing a regression model for the `price` of a diamond in terms of the possible predictor variables in the dataset. 
+
+  i. Use `ggpairs()` to investigate correlations between `price` and the predictors (this may take a while to run, don't worry, make coffee or something).
+
+```{r, message = FALSE}
+ggpairs(diamonds_tidy)
+```
+
+`carat` is strongly correlated with `price`. Boxplots of `price` split by `cut`, `color` and particularly `clarity` also show some variation.
+
+  ii. Perform further `ggplot` visualisations of any significant correlations you find.
+
+```{r}
+diamonds_tidy %>%
+  ggplot(aes(x = carat, y = price)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+```{r}
+diamonds_tidy %>%
+  ggplot(aes(x = cut, y = price)) +
+  geom_boxplot()
+```
+
+```{r}
+diamonds_tidy %>%
+  ggplot(aes(x = color, y = price)) +
+  geom_boxplot()
+```
+
+```{r}
+diamonds_tidy %>%
+  ggplot(aes(x = clarity, y = price)) +
+  geom_boxplot()
+```
+
+
+5. Shortly we may try a regression fit using one or more of the categorical predictors `cut`, `clarity` and `color`, so let's investigate these predictors. Investigate the levels of these predictors. How many dummy variables do you expect for each of them?
+    
+```{r}
+unique(diamonds_tidy$cut)
+# expect 4 dummies for cut
+
+unique(diamonds_tidy$color)
+# expect 6 dummies for color
+
+unique(diamonds_tidy$clarity)
+# expect 7 dummies for clarity
+```
+
+ 
+6. Start with simple linear regression. Regress `price` on `carat` and check the regression diagnostics.
+
+    
+```{r}
+mod1 <- lm(price ~ carat, data = diamonds_tidy)
+par(mfrow = c(2,2))
+plot(mod1)
+# the residuals show systematic variation, significant deviation from normality and heteroscedasticity. Oh dear...
+```
+    
+
+7. Add another predictor of your choice. Check your assumptions, diagnostics, and interpret the model.
+
+```{r}
+
+mod2_clarity <- lm(price ~ carat + clarity, data = diamonds_tidy)
+summary(mod2_clarity)
+
+# clarity leads to a model with highest r^2, all predictors are significant
+```
+
+
+
+# Extension
+    
+8. Try adding an interaction between `log(carat)` and your chosen categorical predictor. Do you think this interaction term is statistically justified?
+
+    
+```{r}
+mod3_clarity_inter <- lm(log(price) ~ log(carat) + clarity + log(carat):clarity, data = diamonds_tidy)
+summary(mod3_clarity_inter)
+
+# obtain only a small improvement in r^2 from the interaction. 
+# we'll see shortly that the correct test would be an anova() comparing both models
+anova(mod2_clarity, mod3_clarity_inter)
+# the small p-value suggests interaction is statistically significant, but the effect is small.
+```
+    
+9. Find and plot an appropriate visualisation to show the effect of this interaction
+    
+```{r}
+diamonds_tidy %>%
+  ggplot(aes(x = log(carat), y = log(price), colour = clarity)) +
+  geom_point(alpha = 0.1) +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap(~ clarity)
+
+# not much evidence that the gradient of the line varies significantly with clarity
+```
+
