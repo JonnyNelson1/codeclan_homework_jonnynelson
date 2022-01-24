@@ -65,7 +65,27 @@ unique(house_sales$waterfront)
 
 # make waterfront logical
 
+# make yr_renovated into renovated - logical
+
+# grade and condition into ordinal variables 
+
 glimpse(house_sales)
+
+house_sales_trim <- house_sales %>%
+  dplyr::select(-c(date, id, sqft_living15, sqft_lot15, zipcode)) %>%
+  mutate(waterfront = as.logical(waterfront),
+         grade = as.factor(grade),
+         condition = as.factor(condition),
+         renovated = yr_renovated != 0) %>%
+  dplyr::select(-"yr_renovated")
+
+houses_tidy <- houses %>%
+  dplyr::select(-c("id", "date", "sqft_living15", "sqft_lot15", "zipcode")) %>%
+  mutate(waterfront = as.logical(waterfront)) %>%
+  mutate(renovated = yr_renovated != 0) %>%
+  dplyr::select(-"yr_renovated") %>%
+  mutate(condition = as_factor(condition)) %>%
+  mutate(grade = as_factor(grade))
 ```
 
 
@@ -84,6 +104,14 @@ Tidy up the data ready for regression:
 
 Check for aliased variables using the `alias()` function (this takes in a formula object and a data set). [**Hint** - formula `price ~ .` says 'price varying with all predictors', this is a suitable input to `alias()`]. Remove variables that lead to an alias. Check the 'Elements of multiple regression' lesson for a dropdown containing further information on finding aliased variables in a dataset.
 
+```{r}
+alias(price ~ ., data = house_sales_trim)
+
+# sqft_basement is correlated sqft_living and sqft_above
+
+house_sales_trim<- house_sales_trim %>%
+  dplyr::select(-"sqft_living")
+```
 
 # Question 3
 
