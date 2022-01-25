@@ -1,0 +1,195 @@
+---
+title: "homework_titanic"
+author: "Jonny Nelson"
+date: "25/01/2022"
+output: html_document
+---
+
+# Loading in the libraries and the data
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(rpart)
+library(rpart.plot)
+library(tidyverse)
+library(GGally)
+library(modelr)
+
+titanic_set <- read_csv('data/titanic_decision_tree_data.csv')
+
+shuffle_index <- sample(1:nrow(titanic_set))
+
+# shuffle the data so class order isn't in order - need this for training/testing split later on 
+
+titanic_set <- titanic_set[shuffle_index,]
+```
+
+# 1. Cleaning the data
+
+```{r}
+titanic_clean <- titanic_set %>%
+  filter(!is.na(survived)) %>%
+  mutate(survived = if_else(survived == 1, "Yes", "No"),
+         pclass = as.factor(pclass),
+         age_status = if_else(age <= 16, "Child", "Adult")) %>%
+  mutate_if(is.character, as.factor) %>%
+  select(-c("passenger_id", "name", "age", "sib_sp", "parch", "ticket", "cabin", "fare")) %>%
+  na.omit()
+  
+```
+
+# 2. Data Exploration
+
+```{r}
+ggpairs(titanic_clean)
+```
+
+* #### Ggpairs shows us that pclass and sex appear to have the biggest difference on survival outcome
+
+### Looking at pclass
+
+```{r}
+pclass_plot <- ggplot(titanic_clean) +
+  geom_jitter(aes(x = pclass, y = survived), shape = 1, 
+              position = position_jitter(h = 0.05))
+
+pclass_plot
+```
+
+* #### We can see that where "pclass" == 1, first class, the ratio of survived to died is much higher than where "pclass" == 3, third class.
+
+* #### People in lower classes were less likely to survive
+
+### Looking at sex
+
+```{r}
+sex_plot <- ggplot(titanic_clean) +
+  geom_jitter(aes(x = sex, y = survived), shape = 1, 
+              position = position_jitter(h = 0.05))
+
+sex_plot
+```
+
+* #### We can see that the chance of survival for women is much higher than it was for men aboard the titanic.
+
+* #### This is back in the days when chivalry was still alive and well so this makes sense.
+
+# 3. Making the Traing and Test Set
+
+```{r}
+# Setting the seed
+set.seed(19)
+
+# Splitting the observations
+n_data <- nrow(titanic_clean)
+test_index <- sample(1:n_data, size = n_data*0.2)
+titanic_test <- slice(titanic_clean, test_index)
+titanic_train <- slice(titanic_clean, -test_index)
+```
+
+## Check our Test and Train are not too disimilar
+
+```{r}
+titanic_test %>%
+  janitor::tabyl(survived)
+```
+
+```{r}
+titanic_train %>%
+  janitor::tabyl(survived)
+```
+
+* #### These observations are not super close. Wonder what an acceptable difference between these is?
+
+* #### 80/20 split as it is standard and can do k-folds after
+
+# 4. Build a Decision Tree
+
+```{r}
+titanic_fit <- rpart(
+  formula = survived ~ .,
+  data = titanic_train,
+  method = "class"
+)
+
+rpart.plot(titanic_fit,
+           yesno = 2,
+           fallen.leaves = TRUE,
+           faclen = 6,
+           digits = 4)
+
+# Model is doing a Gini Index to give the nodes in the decision tree
+```
+
+# 5. Write down what this tells you, in detail. 
+
+## What variables are important? 
+
+* #### Straight from the start we can see that sex and then pclass are the most important variables along the decision tree as these are at the top. This matches the data exploration with ggpairs and geom_jitter found earlier.
+
+## What does each node tell you?
+
+* #### The nodes are tiered into 3 levels
+* #### 1st Level: binary decision above or below 0.5, if you were going through this group did you survive. If you were aboard the titanic you most likely survived.
+* #### 2nd Level: Chance of Survival
+* #### 3rd Level: Representative of the proportion of the data passing through it
+
+## Who has the highest chance of surviving? 
+
+* #### If you are female and not in 3rd class you have a chance of survival of 0.93
+
+## Who has the lowest?
+
+* #### Men
+
+
+# 6. Predicitons, Confusion Matrix and Interpretation
+
+## Add Predicitons
+
+```{r}
+library(modelr)
+
+titanic_test_pred <- titanic_test %>%
+  add_predictions(titanic_fit, type = "class")
+
+titanic_test_pred
+```
+
+## Confusiong Matrix
+
+```{r}
+library(yardstick)
+
+conf_mat <- titanic_test_pred %>%
+  conf_mat(truth = survived, estimate = pred)
+
+conf_mat
+```
+
+### Accurancy 
+
+```{r}
+accuracy <- titanic_test_pred %>%
+  accuracy(truth = survived, estimate = pred)
+
+accuracy
+```
+
+
+```{r}
+titanic_test_pred %>%
+  sensitivity(truth = survived, estimate = pred) 
+
+titanic_test_pred %>%
+  specificity(truth = survived, estimate = pred)
+```
+
+```{r}
+library(caret)
+
+confusionMatrix(titanic_test_pred$survived, titanic_test_pred$survived)
+```
+
+
