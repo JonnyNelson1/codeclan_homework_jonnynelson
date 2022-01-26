@@ -175,6 +175,8 @@ accuracy <- titanic_test_pred %>%
   accuracy(truth = survived, estimate = pred)
 
 accuracy
+
+# Accuracy is 75% which is not bad
 ```
 
 
