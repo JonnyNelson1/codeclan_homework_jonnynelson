@@ -1,0 +1,110 @@
+---
+title: "homework_attempt"
+author: "Jonny Nelson"
+date: "26/01/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(GGally)
+library(janitor)
+library(tidyverse)
+library(cluster)
+library(factoextra)
+library(dendextend)
+library(corrplot)
+
+customers <- read_csv("data/mall_customers.csv") %>%
+  clean_names()
+
+head(customers)
+
+# Used range and unique functions to find information below
+```
+
+# Data Exploration
+
+## Understanding the Variables
+
+* #### customer_id - anonamous identifier
+* #### gender - Male and Female
+* #### age - 18 to 70
+* #### annual_income_k - 15K - 137K
+* #### spending_score - 1 to 99
+
+## Initial visualisations 
+
+### Ggpairs
+
+```{r}
+ggpairs(customers)
+```
+* #### Spending score is not correlated to customer_id as expected but also not annual income, which is more suprising.
+* #### age has a low negative correlation with spending score of - 0.327 and gender appears to have some minor differences
+
+### Spending Score vs Age
+
+```{r}
+customers %>%
+  ggplot() +
+  geom_col(aes(x = age, y = spending_score_1_100), bins = range(customers$age), fill = "steel blue")
+```
+
+* #### Can see a normal distribution in the spending score assigned to different ages. 
+* #### Increasing from 18 and then topping out at around 32 until slowly declining until 70.
+
+### Spending Score vs Gender
+
+```{r}
+customers %>%
+  ggplot() +
+  geom_jitter(aes(x = gender, y = spending_score_1_100), bins = range(customers$age), fill = "steel blue", width = 0.02)
+```
+
+```{r}
+customers %>%
+  ggplot() +
+  geom_boxplot(aes(x = gender, y = spending_score_1_100), bins = range(customers$age), fill = "steel blue", width = 0.1)
+```
+
+* #### Spending scores for men and women are remarkably similar. 
+* #### However, men do have a slighly lower 75th percentile and 25th percentile compared to women, so they do in this population, spend slightly less.
+
+# K-Means Clustering
+
+## Normalising the Data
+
+```{r}
+customers_clean <- customers %>%
+  select(-customer_id) %>%
+  mutate(across(where(is.numeric), scale),
+         across(where(is.character), as.factor)) %>%
+  select(spending_score_1_100, age, gender, annual_income_k)
+
+# summary(customers_clean)
+```
+
+## K-Means Clustering
+
+```{r}
+set.seed(9)
+library(purrr) 
+
+max_k <- 20 
+
+customers_scale <- customers_clean %>%
+  select(annual_income_k, spending_score_1_100)
+
+k_clusters <- tibble(k = 2:max_k) %>%
+  mutate(
+    kclust = map(k, ~ kmeans(customers_scale, .x, nstart = 25)), 
+    tidied = map(kclust, tidy),
+    glanced = map(kclust, glance),
+    augmented = map(kclust, augment, customers_scale)
+  )
+
+k_clusters
+```
+

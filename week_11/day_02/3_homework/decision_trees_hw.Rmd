@@ -34,7 +34,7 @@ titanic_clean <- titanic_set %>%
          pclass = as.factor(pclass),
          age_status = if_else(age <= 16, "Child", "Adult")) %>%
   mutate_if(is.character, as.factor) %>%
-  select(-c("passenger_id", "name", "age", "sib_sp", "parch", "ticket", "cabin", "fare")) %>%
+  select(-c("passenger_id", "name", "age", "ticket", "cabin", "fare", "...1")) %>%
   na.omit()
   
 ```
@@ -79,7 +79,7 @@ sex_plot
 
 ```{r}
 # Setting the seed
-set.seed(19)
+set.seed(3)
 
 # Splitting the observations
 n_data <- nrow(titanic_clean)
@@ -99,6 +99,7 @@ titanic_test %>%
 titanic_train %>%
   janitor::tabyl(survived)
 ```
+* #### No more than 5% - difference between the same flags.
 
 * #### These observations are not super close. Wonder what an acceptable difference between these is?
 
@@ -182,16 +183,20 @@ accuracy
 
 ```{r}
 titanic_test_pred %>%
-  sensitivity(truth = survived, estimate = pred) 
+  yardstick::sensitivity(truth = survived, estimate = pred) 
+
+# Very good at predicting True Positive values
 
 titanic_test_pred %>%
-  specificity(truth = survived, estimate = pred)
+  yardstick::specificity(truth = survived, estimate = pred)
+
+# No very good at predicting True Negative values 
 ```
 
 ```{r}
 library(caret)
 
-confusionMatrix(titanic_test_pred$survived, titanic_test_pred$survived)
+confusionMatrix(data = titanic_test_pred$pred, reference = titanic_test_pred$survived)
 ```
 
 
