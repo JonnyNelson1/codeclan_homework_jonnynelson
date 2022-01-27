@@ -91,6 +91,7 @@ customers_clean <- customers %>%
 ```{r}
 set.seed(9)
 library(purrr) 
+library(broom)
 
 max_k <- 20 
 
